@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context="com.example.chung.nhacvieccanhan.ChiTietCongViecActivity">
+
+    <TextView
+        android:id="@+id/tvTenCV"
+        android:layout_marginTop="5dp"
+        android:hint="nhap ten cong viec"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tvMoTaCV"
+        android:layout_marginTop="5dp"
+        android:hint="nhap mo ta cong viec"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_marginTop="5dp"
+        android:hint="date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_marginTop="5dp"
+        android:hint="time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tvDiaDiem"
+        android:layout_marginTop="5dp"
+        android:hint="dia diem cong viec"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tvLoaiCV"
+        android:layout_marginTop="5dp"
+        android:hint="Loai cong viec"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorPrimary" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_weight="1"
+            android:text="Danh sách báo thức"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/colorAccent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageButton
+            android:id="@+id/ibtnAddBaoThuc"
+            android:background="@null"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icon_add"
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
+    </LinearLayout>
+    <ListView
+        android:id="@+id/lvBaoThuc"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/btnQuayLai"
+            android:layout_marginLeft="40dp"
+            android:text="@string/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/btnMaps"
+            android:layout_marginLeft="40dp"
+            android:text="@string/maps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>

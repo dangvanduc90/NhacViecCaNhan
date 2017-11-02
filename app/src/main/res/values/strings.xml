@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">NhacViecCaNhan</string>
+    <string name="title_activity_loai_cong_viec">LoaiCongViecActivity</string>
+    <string name="title_activity_cong_viec">CongViecActivity</string>
+    <string name="title_activity_thoi_gian_bao_thuc">ThoiGianBaoThucActivity</string>
+    <string name="title_activity_thoi_gian_lap">ThoiGianLapActivity</string>
+    <string name="huy">Hủy</string>
+    <string name="back">Quay về</string>
+    <string name="maps">Xem bản đồ</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="google_maps_key">AIzaSyBbcAb-I6ECpi4g0Ov_0pcYAjOpoaZErsI</string>
+</resources>
