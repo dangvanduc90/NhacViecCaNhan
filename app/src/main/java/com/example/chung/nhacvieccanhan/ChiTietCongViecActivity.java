@@ -77,7 +77,7 @@ public class ChiTietCongViecActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 //                startActivity(new Intent(ChiTietCongViecActivity.this, MapsActivity.class));
-                startActivity(new Intent(ChiTietCongViecActivity.this, MapDirectionActivity.class));
+                startActivity(new Intent(ChiTietCongViecActivity.this, MapsActivity.class));
             }
         });
 
@@ -181,9 +181,7 @@ public class ChiTietCongViecActivity extends AppCompatActivity {
             MainActivity.db.QueryData("INSERT INTO ThoiGianBaoThuc VALUES (null, "+id+", '"+date+"', '"+time+"')");
             thoiGianBaoThucList.clear();
             thoiGianBaoThucList = getThoiGianByMaCV(id);
-//            adapter = new BaoThucListViewAdapter(ChiTietCongViecActivity.this, R.layout.row_bao_thuc, thoiGianBaoThucList);
-//            lvBaoThuc.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
             }
         });
         btnAlarmCancel.setOnClickListener(new View.OnClickListener() {
