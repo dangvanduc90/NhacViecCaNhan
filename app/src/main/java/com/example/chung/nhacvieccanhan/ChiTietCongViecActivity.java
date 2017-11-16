@@ -25,7 +25,8 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.chung.nhacvieccanhan.adapter.BaoThucListViewAdapter;
-import com.example.chung.nhacvieccanhan.broadcast.AlarmBroadCast;
+import com.example.chung.nhacvieccanhan.model.CongViec;
+import com.example.chung.nhacvieccanhan.model.SongService;
 import com.example.chung.nhacvieccanhan.model.ThoiGianBaoThuc;
 
 import java.text.SimpleDateFormat;
@@ -34,6 +35,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+
+import static com.example.chung.nhacvieccanhan.ultils.ConstClass.EXTRA_ON_OF;
+import static com.example.chung.nhacvieccanhan.ultils.ConstClass.INTENT_ID_CONGVIEC;
+import static com.example.chung.nhacvieccanhan.ultils.ConstClass.INTENT_MOTA_CONGVIEC;
+import static com.example.chung.nhacvieccanhan.ultils.ConstClass.INTENT_TEN_CONGVIEC;
 
 public class ChiTietCongViecActivity extends AppCompatActivity {
 
@@ -44,6 +50,7 @@ public class ChiTietCongViecActivity extends AppCompatActivity {
     List<ThoiGianBaoThuc> thoiGianBaoThucList;
     List<String> hienThiThoiGian;
     BaoThucListViewAdapter adapter;
+    CongViec congViec;
 
     int year;
     int month;
@@ -84,12 +91,14 @@ public class ChiTietCongViecActivity extends AppCompatActivity {
         Cursor cursor = MainActivity.db.GetData("SELECT * FROM CongViec where id = " + id);
         cursor.moveToFirst();
 
+        int id = cursor.getInt(0);
         String ten = cursor.getString(1);
         String moTa = cursor.getString(2);
         String ngay = cursor.getString(3);
         String thoiGian = cursor.getString(4);
         String diaDiem = cursor.getString(5);
         int maLoaiCV = cursor.getInt(6);
+        congViec = new CongViec(id, ten, moTa, ngay, thoiGian, diaDiem, maLoaiCV);
         cursor.close();
 
         tvTenCV.setText(ten);
@@ -161,12 +170,19 @@ public class ChiTietCongViecActivity extends AppCompatActivity {
 
             AlarmManager alarmManager;
             alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-            Intent intent = new Intent(ChiTietCongViecActivity.this, AlarmBroadCast.class);
-            intent.putExtra("extra", "on");
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(
+            Intent intent = new Intent(ChiTietCongViecActivity.this, SongService.class);
+            intent.putExtra(EXTRA_ON_OF, "on");
+            intent.putExtra(INTENT_ID_CONGVIEC, congViec.getId());
+            intent.putExtra(INTENT_TEN_CONGVIEC, congViec.getTenCV());
+            intent.putExtra(INTENT_MOTA_CONGVIEC, congViec.getMoTa());
+            PendingIntent pendingIntent = PendingIntent.getService(
                     ChiTietCongViecActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT
             );
+
             alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            }
 
             Toast.makeText(getBaseContext(), "Alarm is set successfully",Toast.LENGTH_SHORT).show();
 
@@ -234,11 +250,11 @@ public class ChiTietCongViecActivity extends AppCompatActivity {
     private void deleteAlarm() {
         AlarmManager alarmManager;
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        Intent intent = new Intent(ChiTietCongViecActivity.this, AlarmBroadCast.class);
+        Intent intent = new Intent(ChiTietCongViecActivity.this, SongService.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(ChiTietCongViecActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.cancel(pendingIntent);
-        intent.putExtra("extra", "off");
-        sendBroadcast(intent);
+        intent.putExtra(EXTRA_ON_OF, "off");
+        startService(intent);
     }
 
     private void initView() {

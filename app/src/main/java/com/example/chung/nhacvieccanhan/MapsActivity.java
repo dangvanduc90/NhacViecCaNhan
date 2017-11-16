@@ -1,11 +1,9 @@
 package com.example.chung.nhacvieccanhan;
 
-import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +28,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.chung.nhacvieccanhan.ultils.ConstClass.ZOOM_MAP;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, DirectionFinderListener {
 
@@ -85,13 +85,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng hcmus = new LatLng(10.762963, 106.682394);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, 18));
+        LatLng hcmus = new LatLng(20.982295, 105.832841);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hcmus, ZOOM_MAP));
         originMarkers.add(mMap.addMarker(new MarkerOptions()
-                .title("Đại học Khoa học tự nhiên")
+                .title("Định Công")
                 .position(hcmus)));
+        mMap.setMyLocationEnabled(true);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -99,9 +100,44 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        mMap.setMyLocationEnabled(true);
+//            return;
+//        }
+        mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+            @Override
+            public void onMyLocationChange(Location location) {
+                LatLng loc = new LatLng(location.getLatitude(), location.getLongitude());
+                Marker mMarker = mMap.addMarker(new MarkerOptions().position(loc));
+                if(mMap != null){
+                    mMap.clear();
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, ZOOM_MAP));
+                    originMarkers.add(mMarker);
+                }
+            }
+        });
+//        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+//            @Override
+//            public void onMapClick(LatLng latLng) {
+//                Marker mMarker = mMap.addMarker(new MarkerOptions().position(latLng));
+//                collection.add(mMarker);
+//                if(mMap != null){
+//                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_MAP));
+//                    originMarkers.removeAll(collection);
+//                    originMarkers.add(mMarker);
+//                }
+//            }
+//        });
+//        mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+//            @Override
+//            public void onMapLoaded() {
+//                Location location = mMap.getMyLocation();
+//                LatLng loc = new LatLng(location.getLatitude(), location.getLongitude());
+//                Marker mMarker = mMap.addMarker(new MarkerOptions().position(loc));
+//                if(mMap != null){
+//                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, ZOOM_MAP));
+//                    originMarkers.add(mMarker);
+//                }
+//            }
+//        });
     }
 
 
@@ -161,4 +197,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             polylinePaths.add(mMap.addPolyline(polylineOptions));
         }
     }
+
 }
