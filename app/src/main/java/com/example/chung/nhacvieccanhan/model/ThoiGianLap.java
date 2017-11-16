@@ -6,14 +6,14 @@ package com.example.chung.nhacvieccanhan.model;
 
 public class ThoiGianLap {
     private int id;
-    private String SoThoiGianLap;
+    private int SoThoiGianLap;
 
-    public ThoiGianLap(int id, String soThoiGianLap) {
+    public ThoiGianLap(int id, int soThoiGianLap) {
         this.id = id;
         SoThoiGianLap = soThoiGianLap;
     }
 
-    public ThoiGianLap(String soThoiGianLap) {
+    public ThoiGianLap(int soThoiGianLap) {
         SoThoiGianLap = soThoiGianLap;
     }
 
@@ -25,11 +25,11 @@ public class ThoiGianLap {
         this.id = id;
     }
 
-    public String getSoThoiGianLap() {
+    public int getSoThoiGianLap() {
         return SoThoiGianLap;
     }
 
-    public void setSoThoiGianLap(String soThoiGianLap) {
+    public void setSoThoiGianLap(int soThoiGianLap) {
         SoThoiGianLap = soThoiGianLap;
     }
 }

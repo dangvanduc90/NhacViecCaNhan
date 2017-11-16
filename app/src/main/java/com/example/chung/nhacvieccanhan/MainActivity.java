@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             db.QueryData("CREATE TABLE LoaiCongViec (id INTEGER PRIMARY KEY AUTOINCREMENT, TenLoaiCV VARCHAR, MoTaLoaiCV VARCHAR)");
             db.QueryData("CREATE TABLE CongViec (id INTEGER PRIMARY KEY AUTOINCREMENT, TenCV VARCHAR, MoTa VARCHAR, Ngay date, ThoiGian time, DiaDiem VARCHAR, MaLoaiCV INTEGER)");
             db.QueryData("CREATE TABLE ThoiGianBaoThuc (id INTEGER PRIMARY KEY AUTOINCREMENT, MaCV INTEGER, Ngay date, ThoiGian time)");
-            db.QueryData("CREATE TABLE ThoiGianLap (id INTEGER PRIMARY KEY AUTOINCREMENT, SoThoiGianLap VARCHAR)");
+            db.QueryData("CREATE TABLE ThoiGianLap (id INTEGER PRIMARY KEY AUTOINCREMENT, SoThoiGianLap INTEGER)");
 
             // add record
             db.QueryData("INSERT INTO CongViec VALUES (null, 'đi mua điện thoại', 'mô tả công viêc,ád', '2014-12-22', '12:10:59', 'định công', 1)");
@@ -45,6 +45,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             db.QueryData("INSERT INTO LoaiCongViec VALUES (null, 'mua dien thoai samsung j3 null', '12312323a')");
             db.QueryData("INSERT INTO ThoiGianBaoThuc VALUES (null, 1, '2014-12-22', '12:11:00')");
             db.QueryData("INSERT INTO ThoiGianBaoThuc VALUES (null, 1, '2014-12-22', '12:15:00')");
+//            db.QueryData("INSERT INTO ThoiGianLap VALUES (null, 12)");
+//            db.QueryData("INSERT INTO ThoiGianLap VALUES (null, 13)");
+//            db.QueryData("INSERT INTO ThoiGianLap VALUES (null, 14)");
 
         } catch (Exception e) {
             Log.d("sqlerror", e.getMessage());

@@ -3,14 +3,19 @@ package com.example.chung.nhacvieccanhan;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.os.Build;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.chung.nhacvieccanhan.model.SongService;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 import static com.example.chung.nhacvieccanhan.ultils.ConstClass.EXTRA_ON_OF;
 import static com.example.chung.nhacvieccanhan.ultils.ConstClass.INTENT_MOTA_CONGVIEC;
@@ -20,6 +25,9 @@ public class AlarmScreenActivity extends AppCompatActivity {
 
     Button btnDismiss, btnSnooze;
     TextView tvAlarmTenCV, tvAlarmMoTaCV;
+    private List<Integer> soThoiGianLapList;
+    int countSnoozeAlarm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +40,16 @@ public class AlarmScreenActivity extends AppCompatActivity {
 
         tvAlarmTenCV.setText(tenCV);
         tvAlarmMoTaCV.setText(moTaCV);
+
+        soThoiGianLapList = new ArrayList<>();
+        countSnoozeAlarm = 0;
+
+        Cursor cursor = MainActivity.db.GetData("SELECT * FROM ThoiGianLap");
+
+        while (cursor.moveToNext()) {
+            soThoiGianLapList.add(cursor.getInt(1));
+        }
+        cursor.close();
 
         btnDismiss.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,9 +75,26 @@ public class AlarmScreenActivity extends AppCompatActivity {
         PendingIntent pendingIntent = PendingIntent.getService(
                 AlarmScreenActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT
         );
-        alarmManager.set(AlarmManager.RTC_WAKEUP, 1000, pendingIntent);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, 1000, pendingIntent);
+
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (soThoiGianLapList.size() > 0 && countSnoozeAlarm < soThoiGianLapList.size()) {
+            Log.d("1234", soThoiGianLapList.get(countSnoozeAlarm) * 60000+"");
+            Log.d("1234", currentTime+"");
+            Log.d("1234", countSnoozeAlarm+"");
+
+            alarmManager.set(AlarmManager.RTC_WAKEUP, currentTime + soThoiGianLapList.get(countSnoozeAlarm) * 60000, pendingIntent);
+        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            if (soThoiGianLapList.size() > 0 && countSnoozeAlarm < soThoiGianLapList.size()) {
+//                Log.d("1234", soThoiGianLapList.get(countSnoozeAlarm) * 60000+"");
+//                alarmManager.setExact(AlarmManager.RTC_WAKEUP, currentTime + soThoiGianLapList.get(countSnoozeAlarm) * 60000, pendingIntent);
+//            }
+//        }
+
+        if (countSnoozeAlarm < soThoiGianLapList.size()) {
+            countSnoozeAlarm++;
+        } else {
+            countSnoozeAlarm = soThoiGianLapList.size() - 1;
         }
     }
 

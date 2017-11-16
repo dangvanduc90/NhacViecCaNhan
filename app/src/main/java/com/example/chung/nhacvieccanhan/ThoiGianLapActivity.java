@@ -1,25 +1,33 @@
 package com.example.chung.nhacvieccanhan;
 
-import android.content.ComponentName;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.GridView;
 
-import com.example.chung.nhacvieccanhan.model.TestService;
+import com.example.chung.nhacvieccanhan.model.ThoiGianLap;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ThoiGianLapActivity extends AppCompatActivity {
 
-    private ServiceConnection serviceConnection;
-    private boolean isConnected = false;
-    private TestService testService;
-
+    private List<ThoiGianLap> thoiGianLapList;
+    GridView gridView;
+    ArrayAdapter adapter;
+    private List<Integer> soThoiGianLapList;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,39 +39,77 @@ public class ThoiGianLapActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                startActivity(new Intent(ThoiGianLapActivity.this, ThemThoiGianLapActivity.class));
             }
         });
+        thoiGianLapList = new ArrayList<>();
+        soThoiGianLapList = new ArrayList<>();
 
-        connectService();
+        Cursor cursor = MainActivity.db.GetData("SELECT * FROM ThoiGianLap");
+
+        while (cursor.moveToNext()) {
+            thoiGianLapList.add(new ThoiGianLap(cursor.getInt(0), cursor.getInt(1)));
+            soThoiGianLapList.add(cursor.getInt(1));
+        }
+        cursor.close();
+
+        initView();
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, soThoiGianLapList);
+        registerForContextMenu(gridView);
+
+        gridView.setAdapter(adapter);
+        
+    }
+    
+    private void initView() {
+        gridView = (GridView) findViewById(R.id.gridView);
     }
 
     @Override
-    protected void onDestroy() {
-        unbindService(serviceConnection);
-        super.onDestroy();
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.thoigianlap_menu, menu);
     }
 
-    private void connectService() {
-        Intent intent = new Intent(this, TestService.class);
-        serviceConnection = new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-                TestService.MyBinder myBinder = (TestService.MyBinder) iBinder;
-                testService = myBinder.getService();
-                isConnected = true;
-                int rs = testService.add(3, 4);
-                Toast.makeText(ThoiGianLapActivity.this, "" + rs, Toast.LENGTH_SHORT).show();
-            }
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        final int position = info.position;
+        switch (item.getItemId()) {
+            case R.id.delete:
+                AlertDialog.Builder builder = new AlertDialog.Builder(ThoiGianLapActivity.this);
+                builder.setMessage("Bạn có chắc chắn muốn xóa");
+                builder.setCancelable(true);
+                builder.setTitle("Xác nhận xóa");
+                builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ThoiGianLap thoiGianLap = thoiGianLapList.get(position);
+                        MainActivity.db.QueryData("DELETE FROM ThoiGianLap where id = " + thoiGianLap.getId());
 
-            @Override
-            public void onServiceDisconnected(ComponentName componentName) {
-                testService = null;
-                isConnected = false;
-                Toast.makeText(ThoiGianLapActivity.this, "" + isConnected, Toast.LENGTH_SHORT).show();
-            }
-        };
-        bindService(intent, serviceConnection, BIND_AUTO_CREATE);
+                        thoiGianLapList.clear();
+                        soThoiGianLapList.clear();
+
+                        Cursor cursor = MainActivity.db.GetData("SELECT * FROM ThoiGianLap");
+                        while (cursor.moveToNext()) {
+                            thoiGianLapList.add(new ThoiGianLap(cursor.getInt(0), cursor.getInt(1)));
+                            soThoiGianLapList.add(cursor.getInt(1));
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+                builder.show();
+                break;
+            default:
+                break;
+        }
+        return super.onContextItemSelected(item);
     }
 }

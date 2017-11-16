@@ -86,7 +86,8 @@
 
         <receiver android:name=".model.AlarmReceiver" />
 
-        <activity android:name=".AlarmScreenActivity"></activity>
+        <activity android:name=".AlarmScreenActivity" />
+        <activity android:name=".ThemThoiGianLapActivity"></activity>
     </application>
 
 </manifest>
