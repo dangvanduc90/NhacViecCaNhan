@@ -43,7 +43,7 @@ import static com.example.chung.nhacvieccanhan.ultils.ConstClass.INTENT_TEN_CONG
 
 public class ChiTietCongViecActivity extends AppCompatActivity {
 
-    Button btnQuayLai, btnMaps;
+    Button btnQuayLai;
     ImageButton ibtnAddBaoThuc;
     TextView tvTenCV, tvMoTaCV, tvDate, tvTime, tvDiaDiem, tvLoaiCV;
     ListView lvBaoThuc;
@@ -65,6 +65,12 @@ public class ChiTietCongViecActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chi_tiet_cong_viec);
 
+        // add back arrow to toolbar
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
         thoiGianBaoThucList = new ArrayList<>();
         hienThiThoiGian = new ArrayList<>();
         Intent intent = getIntent();
@@ -77,14 +83,6 @@ public class ChiTietCongViecActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ChiTietCongViecActivity.this, CongViecActivity.class));
-            }
-        });
-
-        btnMaps.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                startActivity(new Intent(ChiTietCongViecActivity.this, MapsActivity.class));
-                startActivity(new Intent(ChiTietCongViecActivity.this, MapsActivity.class));
             }
         });
 
@@ -265,7 +263,6 @@ public class ChiTietCongViecActivity extends AppCompatActivity {
         tvDiaDiem = (TextView) findViewById(R.id.tvDiaDiem);
         tvLoaiCV = (TextView) findViewById(R.id.tvLoaiCV);
         btnQuayLai = (Button) findViewById(R.id.btnQuayLai);
-        btnMaps = (Button) findViewById(R.id.btnMaps);
         lvBaoThuc = (ListView) findViewById(R.id.lvBaoThuc);
         ibtnAddBaoThuc = (ImageButton) findViewById(R.id.ibtnAddBaoThuc);
     }
@@ -310,5 +307,14 @@ public class ChiTietCongViecActivity extends AppCompatActivity {
                 break;
         }
         return super.onContextItemSelected(item);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
