@@ -3,6 +3,7 @@ package com.example.chung.nhacvieccanhan;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,6 +26,12 @@ public class ThemThoiGianLapActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_them_thoi_gian_lap);
+
+        // add back arrow to toolbar
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         initView();
         hourList = new ArrayList<>();
@@ -68,5 +75,14 @@ public class ThemThoiGianLapActivity extends AppCompatActivity {
         btnAlarmOk = (Button) findViewById(R.id.btnAlarmOk);
         btnAlarmCancel = (Button) findViewById(R.id.btnAlarmCancel);
         spThoiGianLap = (Spinner) findViewById(R.id.spThoiGianLap);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // close this activity and return to preview activity (if there is any)
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

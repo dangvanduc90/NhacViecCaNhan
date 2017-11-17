@@ -2,8 +2,9 @@ package com.example.chung.nhacvieccanhan;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +22,12 @@ public class SuaLoaiCongViecActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sua_loai_cong_viec);
+
+        // add back arrow to toolbar
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         Intent intent = getIntent();
         final int id = Integer.parseInt(intent.getStringExtra("id"));
@@ -54,10 +61,20 @@ public class SuaLoaiCongViecActivity extends AppCompatActivity {
             }
         });
     }
+
     private void initView() {
         edtTenLoaiCV = (EditText) findViewById(R.id.edtTenLoaiCV);
         edtMoTaLoaiCV = (EditText) findViewById(R.id.edtMoTaLoaiCV);
         btnSua = (Button) findViewById(R.id.btnSua);
         btnHuy = (Button) findViewById(R.id.btnHuy);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // close this activity and return to preview activity (if there is any)
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

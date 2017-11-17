@@ -12,7 +12,7 @@ import com.example.chung.nhacvieccanhan.data.SQLite;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button btnLoaiCongViec, btnCongViec, btnThoiGianBaoThuc, btnThoiGianLap;
+    Button btnLoaiCongViec, btnCongViec, btnThoiGianLap;
     static SQLite db;
 
     @Override
@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initView();
         btnLoaiCongViec.setOnClickListener(this);
         btnCongViec.setOnClickListener(this);
-        btnThoiGianBaoThuc.setOnClickListener(this);
         btnThoiGianLap.setOnClickListener(this);
 
         try {
@@ -45,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             db.QueryData("INSERT INTO LoaiCongViec VALUES (null, 'mua dien thoai samsung j3 null', '12312323a')");
             db.QueryData("INSERT INTO ThoiGianBaoThuc VALUES (null, 1, '2014-12-22', '12:11:00')");
             db.QueryData("INSERT INTO ThoiGianBaoThuc VALUES (null, 1, '2014-12-22', '12:15:00')");
-//            db.QueryData("INSERT INTO ThoiGianLap VALUES (null, 12)");
+            db.QueryData("INSERT INTO ThoiGianLap VALUES (null, 2)");
 //            db.QueryData("INSERT INTO ThoiGianLap VALUES (null, 13)");
 //            db.QueryData("INSERT INTO ThoiGianLap VALUES (null, 14)");
 
@@ -58,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initView() {
         btnLoaiCongViec = (Button) findViewById(R.id.btnLoaiCongViec);
         btnCongViec = (Button) findViewById(R.id.btnCongViec);
-        btnThoiGianBaoThuc = (Button) findViewById(R.id.btnThoiGianBaoThuc);
         btnThoiGianLap = (Button) findViewById(R.id.btnThoiGianLap);
     }
 
@@ -70,9 +68,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btnCongViec:
                 startActivity(new Intent(MainActivity.this, CongViecActivity.class));
-                break;
-            case R.id.btnThoiGianBaoThuc:
-                startActivity(new Intent(MainActivity.this, ThoiGianBaoThucActivity.class));
                 break;
             case R.id.btnThoiGianLap:
                 startActivity(new Intent(MainActivity.this, ThoiGianLapActivity.class));

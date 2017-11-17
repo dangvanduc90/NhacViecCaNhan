@@ -308,7 +308,7 @@ public class ChiTietCongViecActivity extends AppCompatActivity {
         }
         return super.onContextItemSelected(item);
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here

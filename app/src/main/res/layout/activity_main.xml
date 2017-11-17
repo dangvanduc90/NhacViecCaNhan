@@ -19,11 +19,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <Button
-        android:id="@+id/btnThoiGianBaoThuc"
-        android:text="Thời gian báo thức"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <Button
         android:id="@+id/btnThoiGianLap"
         android:text="Thời gian lặp"
         android:layout_width="match_parent"
