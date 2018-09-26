@@ -2,6 +2,7 @@ package com.example.chung.nhacvieccanhan;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -16,12 +17,17 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
+import com.example.chung.nhacvieccanhan.helpers.AlarmHelper;
+import com.example.chung.nhacvieccanhan.model.CongViec;
+
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class ThemCongViecActivity extends AppCompatActivity {
 
+    private final String TAG = "ThemCongViecActivity";
     ArrayAdapter arrayAdapter;
 
     EditText edtTen, edtMoTa, edtDate, edtTime, edtDiaDiem;
@@ -31,7 +37,7 @@ public class ThemCongViecActivity extends AppCompatActivity {
     Calendar calendar;
     private int mYear, mMonth, mDay, mHour, mMinute;
 
-    int loaiCV;
+    int maLoaiCV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +64,7 @@ public class ThemCongViecActivity extends AppCompatActivity {
         }
         cursor.close();
         if (maLoaiCVList.size() > 0) {
-            loaiCV = maLoaiCVList.get(0);
+            maLoaiCV = maLoaiCVList.get(0);
         }
 
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, tenLoaiCVList);
@@ -68,7 +74,7 @@ public class ThemCongViecActivity extends AppCompatActivity {
         spnLoaiCV.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                loaiCV = maLoaiCVList.get(position);
+                maLoaiCV = maLoaiCVList.get(position);
             }
 
             @Override
@@ -86,6 +92,9 @@ public class ThemCongViecActivity extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         edtDate.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
+                        mYear = year;
+                        mMonth = month;
+                        mDay = dayOfMonth;
                     }
                 }, mYear, mMonth, mDay);
                 datePickerDialog.show();
@@ -95,12 +104,14 @@ public class ThemCongViecActivity extends AppCompatActivity {
         btnTimePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mHour = calendar.get(Calendar.HOUR);
+                mHour = calendar.get(Calendar.HOUR_OF_DAY);
                 mMinute = calendar.get(Calendar.MINUTE);
                 TimePickerDialog timePickerDialog = new TimePickerDialog(ThemCongViecActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         edtTime.setText(hourOfDay + ":" + minute);
+                        mHour = hourOfDay;
+                        mMinute = minute;
                     }
                 }, mHour, mMinute, true);
                 timePickerDialog.show();
@@ -112,11 +123,30 @@ public class ThemCongViecActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String ten = edtTen.getText().toString();
                 String moTa = edtMoTa.getText().toString();
-                String date = edtDate.getText().toString();
-                String time = edtTime.getText().toString();
+                String ngay = edtDate.getText().toString();
+                String thoiGian = edtTime.getText().toString();
                 String diaDiem = edtDiaDiem.getText().toString();
 
-                MainActivity.db.QueryData("INSERT INTO CongViec VALUES (null, '"+ten+"', '"+moTa+"', '"+date+"', '"+time+"', '"+diaDiem+"', "+loaiCV+")");
+                // Create a new map of values, where column names are the keys
+                ContentValues values = new ContentValues();
+                values.put("TenCV", ten);
+                values.put("MoTa", moTa);
+                values.put("Ngay", ngay);
+                values.put("ThoiGian", thoiGian);
+                values.put("DiaDiem", diaDiem);
+                values.put("MaLoaiCV", maLoaiCV);
+                long id = MainActivity.db.Insert("CongViec", values);
+
+                CongViec congViec = new CongViec(
+                        id,
+                        ten,
+                        moTa,
+                        ngay,
+                        thoiGian,
+                        diaDiem,
+                        maLoaiCV);
+
+                AlarmHelper.createAlarm(ThemCongViecActivity.this, congViec);
                 startActivity(new Intent(ThemCongViecActivity.this, CongViecActivity.class));
             }
         });

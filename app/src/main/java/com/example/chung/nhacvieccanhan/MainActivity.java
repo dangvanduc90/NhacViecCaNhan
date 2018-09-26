@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.chung.nhacvieccanhan.data.SQLite;
+import com.example.chung.nhacvieccanhan.ultils.UtilLog;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -30,26 +31,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // tao bang
             db.QueryData("DROP TABLE IF EXISTS LoaiCongViec");
             db.QueryData("DROP TABLE IF EXISTS CongViec");
-            db.QueryData("DROP TABLE IF EXISTS ThoiGianBaoThuc");
             db.QueryData("DROP TABLE IF EXISTS ThoiGianLap");
 
             db.QueryData("CREATE TABLE LoaiCongViec (id INTEGER PRIMARY KEY AUTOINCREMENT, TenLoaiCV VARCHAR, MoTaLoaiCV VARCHAR)");
             db.QueryData("CREATE TABLE CongViec (id INTEGER PRIMARY KEY AUTOINCREMENT, TenCV VARCHAR, MoTa VARCHAR, Ngay date, ThoiGian time, DiaDiem VARCHAR, MaLoaiCV INTEGER)");
-            db.QueryData("CREATE TABLE ThoiGianBaoThuc (id INTEGER PRIMARY KEY AUTOINCREMENT, MaCV INTEGER, Ngay date, ThoiGian time)");
             db.QueryData("CREATE TABLE ThoiGianLap (id INTEGER PRIMARY KEY AUTOINCREMENT, SoThoiGianLap INTEGER)");
 
             // add record
-            db.QueryData("INSERT INTO CongViec VALUES (null, 'đi mua điện thoại', 'mô tả công viêc,ád', '2014-12-22', '12:10:59', 'định công', 1)");
-            db.QueryData("INSERT INTO LoaiCongViec VALUES (null, 'mua dien thoai samsung j3 ex', '12312323a')");
-            db.QueryData("INSERT INTO LoaiCongViec VALUES (null, 'mua dien thoai samsung j3 null', '12312323a')");
-            db.QueryData("INSERT INTO ThoiGianBaoThuc VALUES (null, 1, '2014-12-22', '12:11:00')");
-            db.QueryData("INSERT INTO ThoiGianBaoThuc VALUES (null, 1, '2014-12-22', '12:15:00')");
+//            db.QueryData("INSERT INTO CongViec VALUES (1, 'đi mua điện thoại', 'mô tả công viêc,ád', '2014-12-22', '12:10:59', 'định công', 1)");
+            db.QueryData("INSERT INTO LoaiCongViec VALUES (1, 'mua dien thoai samsung j3 ex', '12312323a')");
+            db.QueryData("INSERT INTO LoaiCongViec VALUES (2, 'mua dien thoai samsung j3 null', '12312323a')");
             db.QueryData("INSERT INTO ThoiGianLap VALUES (null, 2)");
 //            db.QueryData("INSERT INTO ThoiGianLap VALUES (null, 13)");
 //            db.QueryData("INSERT INTO ThoiGianLap VALUES (null, 14)");
 
         } catch (Exception e) {
-            Log.d("sqlerror", e.getMessage());
+            UtilLog.log_d("sqlerror", e.getMessage());
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }

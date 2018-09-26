@@ -16,11 +16,15 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
+import com.example.chung.nhacvieccanhan.helpers.AlarmHelper;
+import com.example.chung.nhacvieccanhan.model.CongViec;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 public class SuaCongViecActivity extends AppCompatActivity {
+    private static final String TAG = "SuaCongViecActivity";
 
     ArrayAdapter arrayAdapter;
 
@@ -32,6 +36,7 @@ public class SuaCongViecActivity extends AppCompatActivity {
     private int mYear, mMonth, mDay, mHour, mMinute;
     Cursor cursor;
     int loaiCV;
+    int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +50,7 @@ public class SuaCongViecActivity extends AppCompatActivity {
         }
 
         Intent intent = getIntent();
-        int id = Integer.parseInt(intent.getStringExtra("id"));
+        id = Integer.parseInt(intent.getStringExtra("id"));
 
         initView();
 
@@ -111,6 +116,9 @@ public class SuaCongViecActivity extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         edtDate.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
+                        mYear = year;
+                        mMonth = month;
+                        mDay = dayOfMonth;
                     }
                 }, mYear, mMonth, mDay);
                 datePickerDialog.show();
@@ -126,6 +134,8 @@ public class SuaCongViecActivity extends AppCompatActivity {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         edtTime.setText(hourOfDay + ":" + minute);
+                        mHour = hourOfDay;
+                        mMinute = minute;
                     }
                 }, mHour, mMinute, true);
                 timePickerDialog.show();
@@ -142,6 +152,17 @@ public class SuaCongViecActivity extends AppCompatActivity {
                 String diaDiem = edtDiaDiem.getText().toString();
 
                 MainActivity.db.QueryData("UPDATE CongViec SET TenCV = '"+ten+"', MoTa ='"+moTa+"', Ngay = '"+date+"', ThoiGian = '"+time+"', DiaDiem = '"+diaDiem+"', MaLoaiCV = "+loaiCV);
+
+                CongViec congViec = new CongViec(
+                        id,
+                        ten,
+                        moTa,
+                        date,
+                        time,
+                        diaDiem,
+                        loaiCV);
+                AlarmHelper.deleteAlarm(SuaCongViecActivity.this, congViec);
+                AlarmHelper.createAlarm(SuaCongViecActivity.this, congViec);
                 startActivity(new Intent(SuaCongViecActivity.this, CongViecActivity.class));
             }
         });

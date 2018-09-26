@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.example.chung.nhacvieccanhan.adapter.CongViecListViewAdapter;
+import com.example.chung.nhacvieccanhan.helpers.AlarmHelper;
 import com.example.chung.nhacvieccanhan.model.CongViec;
 
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class CongViecActivity extends AppCompatActivity {
         cursor.close();
 
         initView();
-        adapter = new CongViecListViewAdapter(this, R.layout.row_cong_viec, congViecList);
+        adapter = new CongViecListViewAdapter(this, R.layout.row_cong_viec, congViecList, MainActivity.db);
         registerForContextMenu(gridView);
 
         gridView.setAdapter(adapter);
@@ -79,7 +80,7 @@ public class CongViecActivity extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item) {
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         final int position = info.position;
-        CongViec congViec;
+        final CongViec congViec;
         Intent intent;
         switch (item.getItemId()) {
             case R.id.detail:
@@ -108,9 +109,8 @@ public class CongViecActivity extends AppCompatActivity {
                 builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        CongViec congViec1 = congViecList.get(position);
-                        MainActivity.db.QueryData("DELETE FROM CongViec where id = " + congViec1.getId());
-
+                        MainActivity.db.QueryData("DELETE FROM CongViec where id = " + congViecList.get(position).getId());
+                        AlarmHelper.deleteAlarm(CongViecActivity.this, congViecList.get(position));
                         congViecList.clear();
                         Cursor cursor = MainActivity.db.GetData("SELECT * FROM CongViec");
                         while (cursor.moveToNext()) {

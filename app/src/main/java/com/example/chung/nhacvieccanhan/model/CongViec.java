@@ -5,7 +5,7 @@ package com.example.chung.nhacvieccanhan.model;
  */
 
 public class CongViec {
-    private int id;
+    private long id;
     private String TenCV;
     private String MoTa;
     private String Ngay;
@@ -13,7 +13,7 @@ public class CongViec {
     private String DiaDiem;
     private int MaLoaiCV;
 
-    public CongViec(int id, String tenCV, String moTa, String ngay, String thoigian, String diaDiem, int maLoaiCV) {
+    public CongViec(long id, String tenCV, String moTa, String ngay, String thoigian, String diaDiem, int maLoaiCV) {
         this.id = id;
         this.TenCV = tenCV;
         this.MoTa = moTa;
@@ -32,7 +32,7 @@ public class CongViec {
         this.MaLoaiCV = maLoaiCV;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

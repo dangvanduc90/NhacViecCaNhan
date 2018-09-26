@@ -20,7 +20,7 @@ public class ChiTietLoaiCongViecActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chi_tiet_loai_cong_viec);
 
         // add back arrow to toolbar
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }

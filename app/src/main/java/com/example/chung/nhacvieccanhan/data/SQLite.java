@@ -1,5 +1,6 @@
 package com.example.chung.nhacvieccanhan.data;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -29,5 +30,17 @@ public class SQLite extends SQLiteOpenHelper {
     public Cursor GetData(String sql) { // sql = select * from tbl...
         SQLiteDatabase database = getWritableDatabase();
         return database.rawQuery(sql, null);
+    }
+
+    // return id
+    public long Insert(String table, ContentValues values) {
+        SQLiteDatabase database = getWritableDatabase();
+        return database.insert(table, null, values);
+    }
+
+    // return the number of rows affected
+    public long Update(String table, ContentValues values, long id) {
+        SQLiteDatabase database = getWritableDatabase();
+        return database.update(table, values, "id = " + id, null);
     }
 }

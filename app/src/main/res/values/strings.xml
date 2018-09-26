@@ -6,6 +6,7 @@
     <string name="title_activity_thoi_gian_lap">ThoiGianLapActivity</string>
     <string name="huy">Hủy</string>
     <string name="back">Quay về</string>
+    <string name="delete">Xóa</string>
     <string name="maps">Xem bản đồ</string>
     <string name="title_activity_maps">Map</string>
     <string name="google_maps_key">AIzaSyBbcAb-I6ECpi4g0Ov_0pcYAjOpoaZErsI</string>

@@ -8,6 +8,8 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.example.chung.nhacvieccanhan.ultils.UtilLog;
+
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -51,7 +53,7 @@ public class MapDirectionActivity extends AppCompatActivity {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0, 0, (LocationListener) this);
         }
         catch (Exception ex) {
-            Log.d("Exception", ex.getMessage());
+            UtilLog.log_d("Exception", ex.getMessage());
         }
     }
 

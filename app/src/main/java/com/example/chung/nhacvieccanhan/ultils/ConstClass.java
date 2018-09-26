@@ -1,6 +1,5 @@
 package com.example.chung.nhacvieccanhan.ultils;
 
-
 public class ConstClass {
     public static final String NOTIFICATION_ID = "notification_id";
     public static final String CUSTOM_INTENT = "notification_id";
@@ -8,8 +7,10 @@ public class ConstClass {
     public static final String STOP_ACTION = "STOP_ACTION";
     public static final float ZOOM_MAP = 16.0f;
     public static final String INTENT_ID_CONGVIEC = "intent_id_congviec";
-    public static final String INTENT_TEN_CONGVIEC = "intent_ten_congviec";
-    public static final String INTENT_MOTA_CONGVIEC = "intent_mota_congviec";
     public static final String EXTRA_ON_OF = "extra_on_of";
-
+    public static final String ON = "on";
+    public static final String OFF = "off";
+    public static final String ACTION_ON_TOAST = "ACTION_ON_TOAST";
+    public static final String ACTION_OFF_TOAST = "ACTION_OFF_TOAST";
+    public static final int REQUEST_CODE_ALARM_MANAGER = 0;
 }
