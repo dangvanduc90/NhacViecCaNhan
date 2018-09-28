@@ -4,7 +4,9 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 
+import com.example.chung.nhacvieccanhan.data.SQLite;
 import com.example.chung.nhacvieccanhan.model.CongViec;
 import com.example.chung.nhacvieccanhan.model.SongService;
 import com.example.chung.nhacvieccanhan.receiver.AlarmReceiver;
@@ -12,8 +14,10 @@ import com.example.chung.nhacvieccanhan.ultils.UtilLog;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static com.example.chung.nhacvieccanhan.ultils.ConstClass.EXTRA_ON_OF;
 import static com.example.chung.nhacvieccanhan.ultils.ConstClass.INTENT_ID_CONGVIEC;
@@ -57,5 +61,35 @@ public class AlarmHelper {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(mDate.getTime());
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+    }
+    
+    public static void SnoozeAlarm(Context mContext, CongViec congViec, SQLite db) {
+        List<Integer> soThoiGianLapList = new ArrayList<>();
+        int countSnoozeAlarm = 0;
+
+        Cursor cursor = db.GetData("SELECT * FROM ThoiGianLap");
+        while (cursor.moveToNext()) {
+            soThoiGianLapList.add(cursor.getInt(1));
+        }
+        cursor.close();
+
+        if (countSnoozeAlarm < soThoiGianLapList.size()) {
+            countSnoozeAlarm++;
+        } else {
+            countSnoozeAlarm = soThoiGianLapList.size() - 1;
+        }
+
+        AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(mContext, SongService.class);
+        intent.putExtra(EXTRA_ON_OF, ON);
+        PendingIntent pendingIntent = PendingIntent.getService(
+                mContext, REQUEST_CODE_ALARM_MANAGER, intent, PendingIntent.FLAG_UPDATE_CURRENT
+        );
+
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (soThoiGianLapList.size() > 0 && countSnoozeAlarm < soThoiGianLapList.size()) {
+            long nextTime = currentTime + soThoiGianLapList.get(countSnoozeAlarm) * 60000;
+            alarmManager.set(AlarmManager.RTC_WAKEUP, nextTime, pendingIntent);
+        }
     }
 }

@@ -23,5 +23,10 @@
         android:text="Thời gian lặp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/btnBanDo"
+        android:text="Bản Đồ"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

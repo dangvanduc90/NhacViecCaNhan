@@ -13,7 +13,8 @@ import com.example.chung.nhacvieccanhan.ultils.UtilLog;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button btnLoaiCongViec, btnCongViec, btnThoiGianLap;
+    private static final String TAG = "MainActivity";
+    Button btnLoaiCongViec, btnCongViec, btnThoiGianLap, btnBanDo;
     static SQLite db;
 
     @Override
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnLoaiCongViec.setOnClickListener(this);
         btnCongViec.setOnClickListener(this);
         btnThoiGianLap.setOnClickListener(this);
+        btnBanDo.setOnClickListener(this);
 
         try {
             db = new SQLite(MainActivity.this, "NhacViecCaNhan.sqlite", null, 1);
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //            db.QueryData("INSERT INTO ThoiGianLap VALUES (null, 14)");
 
         } catch (Exception e) {
-            UtilLog.log_d("sqlerror", e.getMessage());
+            UtilLog.log_d(TAG, e.getMessage());
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnLoaiCongViec = (Button) findViewById(R.id.btnLoaiCongViec);
         btnCongViec = (Button) findViewById(R.id.btnCongViec);
         btnThoiGianLap = (Button) findViewById(R.id.btnThoiGianLap);
+        btnBanDo = (Button) findViewById(R.id.btnBanDo);
     }
 
     @Override
@@ -68,6 +71,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btnThoiGianLap:
                 startActivity(new Intent(MainActivity.this, ThoiGianLapActivity.class));
+                break;
+            case R.id.btnBanDo:
+                startActivity(new Intent(MainActivity.this, MapsActivity.class));
                 break;
             default:
                 break;

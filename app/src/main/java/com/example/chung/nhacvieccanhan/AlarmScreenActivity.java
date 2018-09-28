@@ -1,10 +1,6 @@
 package com.example.chung.nhacvieccanhan;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Intent;
 import android.database.Cursor;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -13,16 +9,11 @@ import android.widget.TextView;
 
 import com.example.chung.nhacvieccanhan.helpers.AlarmHelper;
 import com.example.chung.nhacvieccanhan.model.CongViec;
-import com.example.chung.nhacvieccanhan.model.SongService;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
-import static com.example.chung.nhacvieccanhan.ultils.ConstClass.EXTRA_ON_OF;
 import static com.example.chung.nhacvieccanhan.ultils.ConstClass.INTENT_ID_CONGVIEC;
-import static com.example.chung.nhacvieccanhan.ultils.ConstClass.ON;
-import static com.example.chung.nhacvieccanhan.ultils.ConstClass.REQUEST_CODE_ALARM_MANAGER;
 
 public class AlarmScreenActivity extends AppCompatActivity {
     private static final String TAG = "AlarmScreenActivity";
@@ -85,35 +76,9 @@ public class AlarmScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 AlarmHelper.deleteAlarm(AlarmScreenActivity.this, congViec);
-                SnoozeAlarm();
+                AlarmHelper.SnoozeAlarm(AlarmScreenActivity.this, congViec, MainActivity.db);
             }
         });
-    }
-
-    private void SnoozeAlarm() {
-        AlarmManager alarmManager;
-        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        Intent intent = new Intent(AlarmScreenActivity.this, SongService.class);
-        intent.putExtra(EXTRA_ON_OF, ON);
-        PendingIntent pendingIntent = PendingIntent.getService(
-                AlarmScreenActivity.this, REQUEST_CODE_ALARM_MANAGER, intent, PendingIntent.FLAG_UPDATE_CURRENT
-        );
-
-        long currentTime = Calendar.getInstance().getTimeInMillis();
-        if (soThoiGianLapList.size() > 0 && countSnoozeAlarm < soThoiGianLapList.size()) {
-            alarmManager.set(AlarmManager.RTC_WAKEUP, currentTime + soThoiGianLapList.get(countSnoozeAlarm) * 60000, pendingIntent);
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if (soThoiGianLapList.size() > 0 && countSnoozeAlarm < soThoiGianLapList.size()) {
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, currentTime + soThoiGianLapList.get(countSnoozeAlarm) * 60000, pendingIntent);
-            }
-        }
-
-        if (countSnoozeAlarm < soThoiGianLapList.size()) {
-            countSnoozeAlarm++;
-        } else {
-            countSnoozeAlarm = soThoiGianLapList.size() - 1;
-        }
     }
 
     private void initView() {

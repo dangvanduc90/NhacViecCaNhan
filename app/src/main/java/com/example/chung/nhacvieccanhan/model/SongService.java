@@ -4,7 +4,6 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -16,10 +15,10 @@ import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.widget.Toast;
 
 import com.example.chung.nhacvieccanhan.AlarmScreenActivity;
 import com.example.chung.nhacvieccanhan.R;
+import com.example.chung.nhacvieccanhan.receiver.NotificationReceiver;
 import com.example.chung.nhacvieccanhan.ultils.UtilLog;
 
 import java.io.IOException;
@@ -37,7 +36,7 @@ public class SongService extends Service {
 
     private static final int MY_NOTIFICATION_ID = 12345;
     MediaPlayer player;
-    private BroadCastToast mCastToast;
+    private NotificationReceiver mNotification;
 
     @Nullable
     @Override
@@ -48,11 +47,11 @@ public class SongService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        mCastToast = new BroadCastToast();
+        mNotification = new NotificationReceiver();
         IntentFilter mFilter = new IntentFilter();
         mFilter.addAction(ACTION_ON_TOAST);
         mFilter.addAction(ACTION_OFF_TOAST);
-        registerReceiver(mCastToast, mFilter);
+        registerReceiver(mNotification, mFilter);
     }
 
     @Override
@@ -90,7 +89,7 @@ public class SongService extends Service {
                             .setVisibility(VISIBILITY_PUBLIC)
                             .setPriority(Notification.PRIORITY_MAX)
                             .setFullScreenIntent(null, true)
-                            .addAction(R.mipmap.snoone, "Action", pendingIntentOn)
+                            .addAction(R.mipmap.snooze, "Snooze", pendingIntentOn)
                             .addAction(R.mipmap.cancel, "Dismiss", pendingIntentOff)
                             .build();
                     NotificationManager notificationService =
@@ -128,27 +127,10 @@ public class SongService extends Service {
         }
         return START_NOT_STICKY;
     }
-
-
-    class BroadCastToast extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent != null) {
-                switch (intent.getAction()) {
-                    case ACTION_ON_TOAST:
-                        Toast.makeText(context, "ACTION_ON_TOAST", Toast.LENGTH_SHORT).show();
-                        break;
-                    case ACTION_OFF_TOAST:
-                        Toast.makeText(context, "ACTION_OFF_TOAST", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            }
-        }
-    }
-
+    
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(mCastToast);
+        unregisterReceiver(mNotification);
     }
 }

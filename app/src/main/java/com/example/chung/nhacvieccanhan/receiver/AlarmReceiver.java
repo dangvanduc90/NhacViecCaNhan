@@ -17,7 +17,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Intent myIntent = new Intent(context, SongService.class);
         myIntent.putExtra(EXTRA_ON_OF, intent.getExtras().getString(EXTRA_ON_OF));
-        UtilLog.log_d(EXTRA_ON_OF, intent.getExtras().getString(EXTRA_ON_OF));
+        UtilLog.log_d(TAG, intent.getExtras().getString(EXTRA_ON_OF));
         context.startService(myIntent);
 
         // TODO Auto-generated method stub
