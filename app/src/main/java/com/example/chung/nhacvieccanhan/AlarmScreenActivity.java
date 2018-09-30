@@ -29,7 +29,7 @@ public class AlarmScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_screen);
 
-        long id = Long.parseLong(getIntent().getExtras().getString(INTENT_ID_CONGVIEC));
+        long id = getIntent().getExtras().getLong(INTENT_ID_CONGVIEC);
         cursor = MainActivity.db.GetData("SELECT * FROM CongViec where id = " + id);
         cursor.moveToFirst();
 

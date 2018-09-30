@@ -23,7 +23,6 @@ import com.example.chung.nhacvieccanhan.ultils.UtilLog;
 
 import java.io.IOException;
 
-import static android.app.Notification.VISIBILITY_PUBLIC;
 import static com.example.chung.nhacvieccanhan.ultils.ConstClass.ACTION_OFF_TOAST;
 import static com.example.chung.nhacvieccanhan.ultils.ConstClass.ACTION_ON_TOAST;
 import static com.example.chung.nhacvieccanhan.ultils.ConstClass.EXTRA_ON_OF;
@@ -57,6 +56,7 @@ public class SongService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         String string_receive = intent.getExtras().getString(EXTRA_ON_OF);
+        long id = intent.getExtras().getLong(INTENT_ID_CONGVIEC);
         if (string_receive.equals(OFF)) {
             if (player != null) {
                 if (player.isPlaying()) {
@@ -71,10 +71,12 @@ public class SongService extends Service {
             try {
                 Intent mIntent1 = new Intent();
                 mIntent1.setAction(ACTION_ON_TOAST);
+                mIntent1.putExtra(INTENT_ID_CONGVIEC, id);
                 PendingIntent pendingIntentOn = PendingIntent.getBroadcast(this, REQUEST_CODE_ALARM_MANAGER, mIntent1, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 Intent mIntent2 = new Intent();
                 mIntent2.setAction(ACTION_OFF_TOAST);
+                mIntent2.putExtra(INTENT_ID_CONGVIEC, id);
                 PendingIntent pendingIntentOff = PendingIntent.getBroadcast(this, REQUEST_CODE_ALARM_MANAGER, mIntent2, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -86,7 +88,6 @@ public class SongService extends Service {
                             .setContentTitle("Bao thuc")
                             .setContentText("Chuyen de thuc hanh")
                             .setDefaults(Notification.DEFAULT_ALL)
-                            .setVisibility(VISIBILITY_PUBLIC)
                             .setPriority(Notification.PRIORITY_MAX)
                             .setFullScreenIntent(null, true)
                             .addAction(R.mipmap.snooze, "Snooze", pendingIntentOn)
@@ -105,20 +106,8 @@ public class SongService extends Service {
 
                 Intent alarmIntent = new Intent(getBaseContext(), AlarmScreenActivity.class);
                 alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                if (intent.hasExtra(INTENT_ID_CONGVIEC)) {
-                    long id = intent.getExtras().getLong(INTENT_ID_CONGVIEC);
-
-                    alarmIntent.putExtra(INTENT_ID_CONGVIEC, id);
-                    getApplication().startActivity(alarmIntent);
-                }
-
-                player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mediaPlayer) {
-                        UtilLog.log_d(TAG, "stopped");
-                    }
-                });
+                alarmIntent.putExtra(INTENT_ID_CONGVIEC, id);
+                getApplication().startActivity(alarmIntent);
 
             } catch (IOException e) {
                 UtilLog.log_d(TAG, e.getMessage());

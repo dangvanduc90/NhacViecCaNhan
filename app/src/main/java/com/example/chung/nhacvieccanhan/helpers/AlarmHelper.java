@@ -35,6 +35,7 @@ public class AlarmHelper {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, REQUEST_CODE_ALARM_MANAGER, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.cancel(pendingIntent);
         intent.putExtra(EXTRA_ON_OF, OFF);
+        intent.putExtra(INTENT_ID_CONGVIEC, congViec.getId());
         mContext.startService(intent);
     }
 
@@ -82,6 +83,7 @@ public class AlarmHelper {
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(mContext, SongService.class);
         intent.putExtra(EXTRA_ON_OF, ON);
+        intent.putExtra(INTENT_ID_CONGVIEC, congViec.getId());
         PendingIntent pendingIntent = PendingIntent.getService(
                 mContext, REQUEST_CODE_ALARM_MANAGER, intent, PendingIntent.FLAG_UPDATE_CURRENT
         );
