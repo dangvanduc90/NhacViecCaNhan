@@ -23,6 +23,22 @@ import static com.example.chung.nhacvieccanhan.ultils.ConstClass.ON;
 public class AlarmHelper {
     private static final String TAG = "AlarmHelper";
 
+    public static long converDateTimeMillis(CongViec congViec) {
+        Date mDate = null;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            mDate = dateFormat.parse(congViec.getNgay());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        int hours = Integer.parseInt(congViec.getThoigian().split(":")[0]);
+        int minutes = Integer.parseInt(congViec.getThoigian().split(":")[1]);
+        mDate.setHours(hours);
+        mDate.setMinutes(minutes);
+        return mDate.getTime();
+    }
+    
+
     public static void deleteAlarm(Context mContext, CongViec congViec) {
         AlarmManager alarmManager;
         alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
@@ -43,19 +59,9 @@ public class AlarmHelper {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 mContext, (int) congViec.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT
         );
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        Date mDate = null;
-        try {
-            mDate = dateFormat.parse(congViec.getNgay());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        int hours = Integer.parseInt(congViec.getThoigian().split(":")[0]);
-        int minutes = Integer.parseInt(congViec.getThoigian().split(":")[1]);
-        mDate.setHours(hours);
-        mDate.setMinutes(minutes);
+        long congViecDateTimeMillis = converDateTimeMillis(congViec);
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(mDate.getTime());
+        calendar.setTimeInMillis(congViecDateTimeMillis);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 
@@ -68,19 +74,8 @@ public class AlarmHelper {
                 mContext, (int) congViec.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT
         );
 
-        Date mDate = null;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        try {
-            mDate = dateFormat.parse(congViec.getNgay());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        int hours = Integer.parseInt(congViec.getThoigian().split(":")[0]);
-        int minutes = Integer.parseInt(congViec.getThoigian().split(":")[1]);
-        mDate.setHours(hours);
-        mDate.setMinutes(minutes);
-        long currentTime = mDate.getTime();
-        long nextTime = currentTime + congViec.getThoiGianLap() * 60000;
+        long congViecDateTimeMillis = converDateTimeMillis(congViec);
+        long nextTime = congViecDateTimeMillis + congViec.getThoiGianLap() * 60000;
 
 //        Calendar cal = Calendar.getInstance();
 //        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm a");

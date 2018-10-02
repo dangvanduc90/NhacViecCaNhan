@@ -2,20 +2,24 @@ package com.example.chung.nhacvieccanhan.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.chung.nhacvieccanhan.MainActivity;
 import com.example.chung.nhacvieccanhan.R;
 import com.example.chung.nhacvieccanhan.data.SQLite;
+import com.example.chung.nhacvieccanhan.helpers.AlarmHelper;
 import com.example.chung.nhacvieccanhan.model.CongViec;
 import com.example.chung.nhacvieccanhan.ultils.UtilLog;
 
+import java.util.Date;
 import java.util.List;
 
 public class CongViecListViewAdapter extends BaseAdapter {
@@ -60,6 +64,7 @@ public class CongViecListViewAdapter extends BaseAdapter {
             viewHolder.tvTDiaDiemCongViec = (TextView) convertView.findViewById(R.id.tvDiaDiemCongViec);
             viewHolder.tvMaLoaiCongViec = (TextView) convertView.findViewById(R.id.tvMaLoaiCongViec);
             viewHolder.tvThoiGianLap = (TextView) convertView.findViewById(R.id.tvThoiGianLap);
+            viewHolder.rowCongViec = (LinearLayout) convertView.findViewById(R.id.rowCongViec);
 
             convertView.setTag(viewHolder);
         } else {
@@ -75,6 +80,13 @@ public class CongViecListViewAdapter extends BaseAdapter {
         viewHolder.tvTDiaDiemCongViec.setText(congViec.getDiaDiem());
         viewHolder.tvThoiGianLap.setText("Lặp lai sau: " + congViec.getThoiGianLap() + " phút");
 
+        long congViecDateTimeMillis = AlarmHelper.converDateTimeMillis(congViec);
+        long currentTime = new Date().getTime();
+        if (congViecDateTimeMillis > currentTime) {
+            viewHolder.rowCongViec.setBackgroundColor(Color.WHITE);
+        } else {
+            viewHolder.rowCongViec.setBackgroundColor(Color.GREEN);
+        }
         Cursor cursor = db.GetData("SELECT * FROM LoaiCongViec where id = " + congViec.getMaLoaiCV());
         cursor.moveToFirst();
         String ten = cursor.getString(1);
@@ -84,7 +96,14 @@ public class CongViecListViewAdapter extends BaseAdapter {
     }
 
     class ViewHolder {
-        TextView tvTenCongViec, tvMoTaCongViec, tvNgayCongViec, tvThoiGianCongViec, tvTDiaDiemCongViec, tvMaLoaiCongViec, tvThoiGianLap;
+        TextView tvTenCongViec,
+                tvMoTaCongViec,
+                tvNgayCongViec,
+                tvThoiGianCongViec,
+                tvTDiaDiemCongViec,
+                tvMaLoaiCongViec,
+                tvThoiGianLap;
+        LinearLayout rowCongViec;
     }
 
 }
