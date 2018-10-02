@@ -204,7 +204,7 @@ public class SuaCongViecActivity extends AppCompatActivity {
                 if (row_afftected > 0) {
                     AlarmHelper.deleteAlarm(SuaCongViecActivity.this, congViec);
                     AlarmHelper.createAlarm(SuaCongViecActivity.this, congViec);
-                    startActivity(new Intent(SuaCongViecActivity.this, CongViecActivity.class));
+                    onBackPressed();
                 } else {
                     Toast.makeText(SuaCongViecActivity.this, "Update fail", Toast.LENGTH_SHORT).show();
                 }
@@ -214,7 +214,7 @@ public class SuaCongViecActivity extends AppCompatActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SuaCongViecActivity.this, CongViecActivity.class));
+                onBackPressed();
             }
         });
     }

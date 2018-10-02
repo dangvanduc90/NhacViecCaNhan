@@ -5,11 +5,11 @@ package com.example.chung.nhacvieccanhan.model;
  */
 
 public class LoaiCongViec {
-    private int id;
+    private long id;
     private String TenLoaiCV;
     private String MoTaLoaiCV;
 
-    public LoaiCongViec(int id, String tenLoaiCV, String moTaLoaiCV) {
+    public LoaiCongViec(long id, String tenLoaiCV, String moTaLoaiCV) {
         this.id = id;
         this.TenLoaiCV = tenLoaiCV;
         this.MoTaLoaiCV = moTaLoaiCV;
@@ -20,11 +20,11 @@ public class LoaiCongViec {
         this.MoTaLoaiCV = moTaLoaiCV;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

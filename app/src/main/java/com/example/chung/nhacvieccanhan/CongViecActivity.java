@@ -187,4 +187,26 @@ public class CongViecActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Cursor cursor = MainActivity.db.GetData("SELECT * FROM CongViec");
+        congViecList.clear();
+        while (cursor.moveToNext()) {
+            congViecList.add(
+                    new CongViec(
+                            cursor.getInt(0),
+                            cursor.getString(1),
+                            cursor.getString(2),
+                            cursor.getString(3),
+                            cursor.getString(4),
+                            cursor.getString(5),
+                            cursor.getInt(6),
+                            cursor.getInt(7)
+                    ));
+        }
+        cursor.close();
+        adapter.notifyDataSetChanged();
+    }
 }

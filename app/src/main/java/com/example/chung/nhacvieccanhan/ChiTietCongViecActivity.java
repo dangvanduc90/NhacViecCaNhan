@@ -46,7 +46,7 @@ public class ChiTietCongViecActivity extends AppCompatActivity {
         btnQuayLai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChiTietCongViecActivity.this, CongViecActivity.class));
+                onBackPressed();
             }
         });
 

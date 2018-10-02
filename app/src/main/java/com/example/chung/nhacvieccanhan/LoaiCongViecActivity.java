@@ -16,6 +16,8 @@ import android.widget.GridView;
 
 import com.example.chung.nhacvieccanhan.adapter.LoaiCongViecListViewAdapter;
 import com.example.chung.nhacvieccanhan.model.LoaiCongViec;
+import com.example.chung.nhacvieccanhan.ultils.ConstClass;
+import com.example.chung.nhacvieccanhan.ultils.UtilLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,7 @@ import java.util.List;
 import static android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class LoaiCongViecActivity extends AppCompatActivity {
+    private static final String TAG = "LoaiCongViecActivity";
 
     GridView gridView;
     LoaiCongViecListViewAdapter adapter;
@@ -90,7 +93,7 @@ public class LoaiCongViecActivity extends AppCompatActivity {
             case R.id.update:
                 loaiCongViec = loaiCongViecList.get(position);
                 intent = new Intent(LoaiCongViecActivity.this, SuaLoaiCongViecActivity.class);
-                intent.putExtra("id", loaiCongViec.getId() + "");
+                intent.putExtra(ConstClass.INTENT_ID_LOADICONGVIEC, loaiCongViec.getId());
                 startActivity(intent);
                 break;
             case R.id.delete:
@@ -133,5 +136,17 @@ public class LoaiCongViecActivity extends AppCompatActivity {
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Cursor cursor = MainActivity.db.GetData("SELECT * FROM LoaiCongViec");
+        loaiCongViecList.clear();
+        while (cursor.moveToNext()) {
+            loaiCongViecList.add(new LoaiCongViec(cursor.getInt(0), cursor.getString(1), cursor.getString(2)));
+        }
+        cursor.close();
+        adapter.notifyDataSetChanged();
     }
 }

@@ -9,10 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.chung.nhacvieccanhan.ultils.ConstClass;
+
 public class ChiTietLoaiCongViecActivity extends AppCompatActivity {
 
     EditText edtTenLoaiCV, edtMoTaLoaiCV;
     Button btnQuayLai;
+    long id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +29,7 @@ public class ChiTietLoaiCongViecActivity extends AppCompatActivity {
         }
 
         Intent intent = getIntent();
-        int id = Integer.parseInt(intent.getStringExtra("id"));
+        id = intent.getLongExtra(ConstClass.INTENT_ID_LOADICONGVIEC, 0);
 
         initView();
 

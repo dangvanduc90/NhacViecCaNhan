@@ -171,14 +171,14 @@ public class ThemCongViecActivity extends AppCompatActivity {
                         thoiGianLap);
 
                 AlarmHelper.createAlarm(ThemCongViecActivity.this, congViec);
-                startActivity(new Intent(ThemCongViecActivity.this, CongViecActivity.class));
+                onBackPressed();
             }
         });
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ThemCongViecActivity.this, CongViecActivity.class));
+                onBackPressed();
             }
         });
     }

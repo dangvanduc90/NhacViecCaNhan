@@ -29,7 +29,7 @@ public class ThemLoaiCongViecActivity extends AppCompatActivity {
         btnHuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ThemLoaiCongViecActivity.this, LoaiCongViecActivity.class));
+                onBackPressed();
             }
         });
 
@@ -39,7 +39,7 @@ public class ThemLoaiCongViecActivity extends AppCompatActivity {
                 String TenLoaiCV = edtTenLoaiCV.getText().toString();
                 String MoTaLoaiCV = edtMoTaLoaiCV.getText().toString();
                 MainActivity.db.QueryData("INSERT INTO LoaiCongViec VALUES (null, '"+TenLoaiCV+"', '"+MoTaLoaiCV+"')");
-                startActivity(new Intent(ThemLoaiCongViecActivity.this, LoaiCongViecActivity.class));
+                onBackPressed();
             }
         });
     }
