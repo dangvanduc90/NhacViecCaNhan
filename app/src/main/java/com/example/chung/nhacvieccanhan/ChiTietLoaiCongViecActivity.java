@@ -33,7 +33,7 @@ public class ChiTietLoaiCongViecActivity extends AppCompatActivity {
         btnQuayLai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChiTietLoaiCongViecActivity.this, LoaiCongViecActivity.class));
+                onBackPressed();
             }
         });
 

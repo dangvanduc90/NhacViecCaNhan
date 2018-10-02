@@ -65,16 +65,17 @@ public class AlarmHelper {
     }
 
     public static void SnoozeAlarm(Context mContext, CongViec congViec) {
-        AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(mContext, SongService.class);
-        intent.putExtra(EXTRA_ON_OF, ON);
-        intent.putExtra(INTENT_ID_CONGVIEC, congViec.getId());
-        PendingIntent pendingIntent = PendingIntent.getService(
-                mContext, (int) congViec.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT
-        );
+        if (congViec.getThoiGianLap() > 0) {
+            AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(mContext, SongService.class);
+            intent.putExtra(EXTRA_ON_OF, ON);
+            intent.putExtra(INTENT_ID_CONGVIEC, congViec.getId());
+            PendingIntent pendingIntent = PendingIntent.getService(
+                    mContext, (int) congViec.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT
+            );
 
-        long congViecDateTimeMillis = converDateTimeMillis(congViec);
-        long nextTime = congViecDateTimeMillis + congViec.getThoiGianLap() * 60000;
+            long congViecDateTimeMillis = converDateTimeMillis(congViec);
+            long nextTime = congViecDateTimeMillis + congViec.getThoiGianLap() * 60000;
 
 //        Calendar cal = Calendar.getInstance();
 //        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
@@ -83,6 +84,8 @@ public class AlarmHelper {
 //        UtilLog.log_d(TAG, congViec.getThoiGianLap() + "");
 //        UtilLog.log_d(TAG, date);
 
-        alarmManager.set(AlarmManager.RTC_WAKEUP, nextTime, pendingIntent);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, nextTime, pendingIntent);
+
+        }
     }
 }
