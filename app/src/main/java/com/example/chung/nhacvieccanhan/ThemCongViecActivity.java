@@ -19,6 +19,7 @@ import android.widget.TimePicker;
 
 import com.example.chung.nhacvieccanhan.helpers.AlarmHelper;
 import com.example.chung.nhacvieccanhan.model.CongViec;
+import com.example.chung.nhacvieccanhan.ultils.UtilLog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -69,7 +70,7 @@ public class ThemCongViecActivity extends AppCompatActivity {
         if (maLoaiCVList.size() > 0) {
             maLoaiCV = maLoaiCVList.get(0);
         }
-        if (maLoaiCVList.size() > 0) {
+        if (thoiGianLapList.size() > 0) {
             thoiGianLap = thoiGianLapList.get(0);
         }
 
@@ -79,6 +80,7 @@ public class ThemCongViecActivity extends AppCompatActivity {
 
         arrThoiGianLap = new ArrayAdapter(this, android.R.layout.simple_spinner_item, thoiGianLapList);
         arrThoiGianLap.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+
         spnThoiGianLap.setAdapter(arrThoiGianLap);
 
         spnLoaiCV.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -157,6 +159,15 @@ public class ThemCongViecActivity extends AppCompatActivity {
                 values.put("MaLoaiCV", maLoaiCV);
                 values.put("ThoiGianLap", thoiGianLap);
                 long id = MainActivity.db.Insert("CongViec", values);
+
+                UtilLog.log_d(TAG, id + "");
+                UtilLog.log_d(TAG, ten);
+                UtilLog.log_d(TAG, moTa);
+                UtilLog.log_d(TAG, ngay);
+                UtilLog.log_d(TAG, thoiGian);
+                UtilLog.log_d(TAG, diaDiem);
+                UtilLog.log_d(TAG, maLoaiCV + "");
+                UtilLog.log_d(TAG, thoiGianLap + "");
 
                 CongViec congViec = new CongViec(
                         id,

@@ -48,6 +48,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             db.QueryData("INSERT INTO LoaiCongViec VALUES (1, 'mua dien thoai samsung j3 ex', '12312323a')");
             db.QueryData("INSERT INTO LoaiCongViec VALUES (2, 'mua dien thoai samsung j3 null', '12312323a')");
 
+//             add record
+            db.QueryData("INSERT INTO CongViec VALUES (" +
+                    "1, " +
+                    "'đi mua điện thoại', " +
+                    "'mô tả công viêc mua điện thoại', " +
+                    "'2-10-2018', " +
+                    "'21:25', " +
+                    "'định công'," +
+                    "1," +
+                    "0" +
+                    ")");
+            db.QueryData("INSERT INTO CongViec VALUES (" +
+                    "2, " +
+                    "'đi mua quần áo', " +
+                    "'mô tả mua quần áo', " +
+                    "'8-9-2018', " +
+                    "'21:25', " +
+                    "'định công2'," +
+                    "1," +
+                    "0" +
+                    ")");
+
+            db.QueryData("INSERT INTO CongViec VALUES (" +
+                    "3, " +
+                    "'đi mua laptop', " +
+                    "'mô tả công viêc mua laptop', " +
+                    "'5-9-2018', " +
+                    "'21:25', " +
+                    "'định công3'," +
+                    "1," +
+                    "0" +
+                    ")");
+
         } catch (Exception e) {
             UtilLog.log_d(TAG, e.getMessage());
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();

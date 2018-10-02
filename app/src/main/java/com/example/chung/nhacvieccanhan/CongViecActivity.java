@@ -13,20 +13,26 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 
 import com.example.chung.nhacvieccanhan.adapter.CongViecListViewAdapter;
 import com.example.chung.nhacvieccanhan.helpers.AlarmHelper;
 import com.example.chung.nhacvieccanhan.model.CongViec;
 import com.example.chung.nhacvieccanhan.ultils.ConstClass;
+import com.example.chung.nhacvieccanhan.ultils.UtilLog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CongViecActivity extends AppCompatActivity {
+    private static final String TAG = "CongViecActivity";
 
-    private List<CongViec> congViecList;
+    private List<CongViec> congViecList, mCongViecList;
     GridView gridView;
+    Button btnSearch;
+    EditText edtKeyword;
     CongViecListViewAdapter adapter;
 
     @Override
@@ -51,6 +57,7 @@ public class CongViecActivity extends AppCompatActivity {
         });
 
         congViecList = new ArrayList<>();
+        mCongViecList = new ArrayList<>();
 
         Cursor cursor = MainActivity.db.GetData("SELECT * FROM CongViec");
 
@@ -68,16 +75,40 @@ public class CongViecActivity extends AppCompatActivity {
                     ));
         }
         cursor.close();
+        mCongViecList.addAll(congViecList);
 
         initView();
         adapter = new CongViecListViewAdapter(this, R.layout.row_cong_viec, congViecList, MainActivity.db);
         registerForContextMenu(gridView);
 
         gridView.setAdapter(adapter);
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String keyword = edtKeyword.getText().toString().trim();
+                int text_length = keyword.length();
+                if (text_length > 0) {
+                    congViecList.clear();
+                    for (int i = 0; i < mCongViecList.size(); i++) {
+                        CongViec mCongViec = mCongViecList.get(i);
+                        if (mCongViec.getTenCV().toLowerCase().contains(keyword.toLowerCase())) {
+                            congViecList.add(mCongViec);
+                        }
+                    }
+                } else {
+                    congViecList.addAll(mCongViecList);
+                }
+                UtilLog.log_d(TAG, congViecList.size() + "");
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private void initView() {
         gridView = (GridView) findViewById(R.id.gridView);
+        edtKeyword = (EditText) findViewById(R.id.edtKeyword);
+        btnSearch = (Button) findViewById(R.id.btnSearch);
     }
 
     @Override

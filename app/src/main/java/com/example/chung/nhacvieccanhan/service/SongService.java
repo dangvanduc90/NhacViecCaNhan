@@ -97,6 +97,7 @@ public class SongService extends Service {
                 NotificationManager notificationService =
                         (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationService.notify(MY_NOTIFICATION_ID, builder);
+//                startForeground(MY_NOTIFICATION_ID, builder);
 
                 AssetFileDescriptor descriptor = getAssets().openFd("nhac_chuong.mp3");
                 player.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength());
