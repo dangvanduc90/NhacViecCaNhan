@@ -147,18 +147,18 @@ public class SuaCongViecActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String ten = edtTen.getText().toString();
                 String moTa = edtMoTa.getText().toString();
-                String date = edtDate.getText().toString();
-                String time = edtTime.getText().toString();
+                String ngay = edtDate.getText().toString();
+                String thoiGian = edtTime.getText().toString();
                 String diaDiem = edtDiaDiem.getText().toString();
 
-                MainActivity.db.QueryData("UPDATE CongViec SET TenCV = '"+ten+"', MoTa ='"+moTa+"', Ngay = '"+date+"', ThoiGian = '"+time+"', DiaDiem = '"+diaDiem+"', MaLoaiCV = "+loaiCV);
+                MainActivity.db.QueryData("UPDATE CongViec SET TenCV = '" + ten + "', MoTa ='" + moTa + "', Ngay = '" + ngay + "', ThoiGian = '" + thoiGian + "', DiaDiem = '" + diaDiem + "', MaLoaiCV = " + loaiCV);
 
                 CongViec congViec = new CongViec(
                         id,
                         ten,
                         moTa,
-                        date,
-                        time,
+                        ngay,
+                        thoiGian,
                         diaDiem,
                         loaiCV);
                 AlarmHelper.deleteAlarm(SuaCongViecActivity.this, congViec);

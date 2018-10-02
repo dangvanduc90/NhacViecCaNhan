@@ -13,4 +13,7 @@ public class ConstClass {
     public static final String ACTION_ON_TOAST = "ACTION_ON_TOAST";
     public static final String ACTION_OFF_TOAST = "ACTION_OFF_TOAST";
     public static final int REQUEST_CODE_ALARM_MANAGER = 0;
+    public static final int VERSION_DATABASE = 1;
+    public static final String DELETE_SUCCESS = "Delete Success";
+    public static final String SNOOZE_SUCCESS = "Snooze Success";
 }

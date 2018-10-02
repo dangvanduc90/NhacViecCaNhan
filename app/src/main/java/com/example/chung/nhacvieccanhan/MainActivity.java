@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.chung.nhacvieccanhan.data.SQLite;
+import com.example.chung.nhacvieccanhan.ultils.ConstClass;
 import com.example.chung.nhacvieccanhan.ultils.UtilLog;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnBanDo.setOnClickListener(this);
 
         try {
-            db = new SQLite(MainActivity.this, "NhacViecCaNhan.sqlite", null, 1);
+            db = new SQLite(MainActivity.this, "NhacViecCaNhan.sqlite", null, ConstClass.VERSION_DATABASE);
             // tao bang
             db.QueryData("DROP TABLE IF EXISTS LoaiCongViec");
             db.QueryData("DROP TABLE IF EXISTS CongViec");

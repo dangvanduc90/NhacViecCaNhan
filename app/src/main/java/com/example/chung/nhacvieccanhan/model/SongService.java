@@ -28,7 +28,6 @@ import static com.example.chung.nhacvieccanhan.ultils.ConstClass.ACTION_ON_TOAST
 import static com.example.chung.nhacvieccanhan.ultils.ConstClass.EXTRA_ON_OF;
 import static com.example.chung.nhacvieccanhan.ultils.ConstClass.INTENT_ID_CONGVIEC;
 import static com.example.chung.nhacvieccanhan.ultils.ConstClass.OFF;
-import static com.example.chung.nhacvieccanhan.ultils.ConstClass.REQUEST_CODE_ALARM_MANAGER;
 
 public class SongService extends Service {
     private String TAG = "SongService";
@@ -72,12 +71,12 @@ public class SongService extends Service {
                 Intent mIntent1 = new Intent();
                 mIntent1.setAction(ACTION_ON_TOAST);
                 mIntent1.putExtra(INTENT_ID_CONGVIEC, id);
-                PendingIntent pendingIntentOn = PendingIntent.getBroadcast(this, REQUEST_CODE_ALARM_MANAGER, mIntent1, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent pendingIntentOn = PendingIntent.getBroadcast(this, (int) id, mIntent1, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 Intent mIntent2 = new Intent();
                 mIntent2.setAction(ACTION_OFF_TOAST);
                 mIntent2.putExtra(INTENT_ID_CONGVIEC, id);
-                PendingIntent pendingIntentOff = PendingIntent.getBroadcast(this, REQUEST_CODE_ALARM_MANAGER, mIntent2, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent pendingIntentOff = PendingIntent.getBroadcast(this, (int) id, mIntent2, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     Notification builder = new NotificationCompat.Builder(this)

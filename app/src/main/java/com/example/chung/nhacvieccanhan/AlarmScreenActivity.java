@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.chung.nhacvieccanhan.helpers.AlarmHelper;
 import com.example.chung.nhacvieccanhan.model.CongViec;
@@ -13,7 +14,9 @@ import com.example.chung.nhacvieccanhan.model.CongViec;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.chung.nhacvieccanhan.ultils.ConstClass.DELETE_SUCCESS;
 import static com.example.chung.nhacvieccanhan.ultils.ConstClass.INTENT_ID_CONGVIEC;
+import static com.example.chung.nhacvieccanhan.ultils.ConstClass.SNOOZE_SUCCESS;
 
 public class AlarmScreenActivity extends AppCompatActivity {
     private static final String TAG = "AlarmScreenActivity";
@@ -68,7 +71,7 @@ public class AlarmScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 AlarmHelper.deleteAlarm(AlarmScreenActivity.this, congViec);
-                finish();
+                Toast.makeText(AlarmScreenActivity.this, DELETE_SUCCESS, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -76,7 +79,8 @@ public class AlarmScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 AlarmHelper.deleteAlarm(AlarmScreenActivity.this, congViec);
-                AlarmHelper.SnoozeAlarm(AlarmScreenActivity.this, congViec, MainActivity.db);
+                AlarmHelper.SnoozeAlarm(AlarmScreenActivity.this, congViec);
+                Toast.makeText(AlarmScreenActivity.this, SNOOZE_SUCCESS, Toast.LENGTH_SHORT).show();
             }
         });
     }

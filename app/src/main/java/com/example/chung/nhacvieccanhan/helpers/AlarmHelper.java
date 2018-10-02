@@ -10,6 +10,7 @@ import com.example.chung.nhacvieccanhan.data.SQLite;
 import com.example.chung.nhacvieccanhan.model.CongViec;
 import com.example.chung.nhacvieccanhan.model.SongService;
 import com.example.chung.nhacvieccanhan.receiver.AlarmReceiver;
+import com.example.chung.nhacvieccanhan.ultils.ConstClass;
 import com.example.chung.nhacvieccanhan.ultils.UtilLog;
 
 import java.text.ParseException;
@@ -23,16 +24,16 @@ import static com.example.chung.nhacvieccanhan.ultils.ConstClass.EXTRA_ON_OF;
 import static com.example.chung.nhacvieccanhan.ultils.ConstClass.INTENT_ID_CONGVIEC;
 import static com.example.chung.nhacvieccanhan.ultils.ConstClass.OFF;
 import static com.example.chung.nhacvieccanhan.ultils.ConstClass.ON;
-import static com.example.chung.nhacvieccanhan.ultils.ConstClass.REQUEST_CODE_ALARM_MANAGER;
 
 public class AlarmHelper {
     private static final String TAG = "AlarmHelper";
+    static SQLite db;
 
     public static void deleteAlarm(Context mContext, CongViec congViec) {
         AlarmManager alarmManager;
         alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(mContext, SongService.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, REQUEST_CODE_ALARM_MANAGER, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, (int) congViec.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.cancel(pendingIntent);
         intent.putExtra(EXTRA_ON_OF, OFF);
         intent.putExtra(INTENT_ID_CONGVIEC, congViec.getId());
@@ -46,7 +47,7 @@ public class AlarmHelper {
         intent.putExtra(EXTRA_ON_OF, ON);
         intent.putExtra(INTENT_ID_CONGVIEC, congViec.getId());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                mContext, REQUEST_CODE_ALARM_MANAGER, intent, PendingIntent.FLAG_UPDATE_CURRENT
+                mContext, (int) congViec.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT
         );
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         Date mDate = null;
@@ -63,11 +64,11 @@ public class AlarmHelper {
         calendar.setTimeInMillis(mDate.getTime());
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
-    
-    public static void SnoozeAlarm(Context mContext, CongViec congViec, SQLite db) {
+
+    public static void SnoozeAlarm(Context mContext, CongViec congViec) {
         List<Integer> soThoiGianLapList = new ArrayList<>();
         int countSnoozeAlarm = 0;
-
+        db = new SQLite(mContext, "NhacViecCaNhan.sqlite", null, ConstClass.VERSION_DATABASE);
         Cursor cursor = db.GetData("SELECT * FROM ThoiGianLap");
         while (cursor.moveToNext()) {
             soThoiGianLapList.add(cursor.getInt(1));
@@ -85,12 +86,14 @@ public class AlarmHelper {
         intent.putExtra(EXTRA_ON_OF, ON);
         intent.putExtra(INTENT_ID_CONGVIEC, congViec.getId());
         PendingIntent pendingIntent = PendingIntent.getService(
-                mContext, REQUEST_CODE_ALARM_MANAGER, intent, PendingIntent.FLAG_UPDATE_CURRENT
+                mContext, (int) congViec.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT
         );
 
         long currentTime = Calendar.getInstance().getTimeInMillis();
+        long nextTime = currentTime + soThoiGianLapList.get(countSnoozeAlarm) * 60000;
+        UtilLog.log_d(TAG, currentTime + " currentTime");
+        UtilLog.log_d(TAG, nextTime + " nextTime");
         if (soThoiGianLapList.size() > 0 && countSnoozeAlarm < soThoiGianLapList.size()) {
-            long nextTime = currentTime + soThoiGianLapList.get(countSnoozeAlarm) * 60000;
             alarmManager.set(AlarmManager.RTC_WAKEUP, nextTime, pendingIntent);
         }
     }
