@@ -6,13 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.example.chung.nhacvieccanhan.model.CongViec;
-import com.example.chung.nhacvieccanhan.model.SongService;
+import com.example.chung.nhacvieccanhan.service.SongService;
 import com.example.chung.nhacvieccanhan.receiver.AlarmReceiver;
-import com.example.chung.nhacvieccanhan.ultils.UtilLog;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 import static com.example.chung.nhacvieccanhan.ultils.ConstClass.EXTRA_ON_OF;
@@ -37,7 +35,6 @@ public class AlarmHelper {
         mDate.setMinutes(minutes);
         return mDate.getTime();
     }
-    
 
     public static void deleteAlarm(Context mContext, CongViec congViec) {
         AlarmManager alarmManager;
@@ -60,9 +57,11 @@ public class AlarmHelper {
                 mContext, (int) congViec.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT
         );
         long congViecDateTimeMillis = converDateTimeMillis(congViec);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(congViecDateTimeMillis);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        long currentTime = new Date().getTime();
+        // thời gian hẹn giờ phải lớn hơn thời gian hiện tai
+        if (congViecDateTimeMillis > currentTime) {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, congViecDateTimeMillis, pendingIntent);
+        }
     }
 
     public static void SnoozeAlarm(Context mContext, CongViec congViec) {

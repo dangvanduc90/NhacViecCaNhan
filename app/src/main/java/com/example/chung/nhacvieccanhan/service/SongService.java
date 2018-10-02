@@ -1,4 +1,4 @@
-package com.example.chung.nhacvieccanhan.model;
+package com.example.chung.nhacvieccanhan.service;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -31,7 +31,7 @@ import static com.example.chung.nhacvieccanhan.ultils.ConstClass.INTENT_ID_CONGV
 import static com.example.chung.nhacvieccanhan.ultils.ConstClass.OFF;
 
 public class SongService extends Service {
-    private String TAG = "SongService";
+    private static final String TAG = "SongService";
 
     private static final int MY_NOTIFICATION_ID = 12345;
     MediaPlayer player;

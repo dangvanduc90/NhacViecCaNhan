@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
-import com.example.chung.nhacvieccanhan.model.SongService;
+import com.example.chung.nhacvieccanhan.service.SongService;
 import com.example.chung.nhacvieccanhan.ultils.UtilLog;
 
 import static com.example.chung.nhacvieccanhan.ultils.ConstClass.EXTRA_ON_OF;

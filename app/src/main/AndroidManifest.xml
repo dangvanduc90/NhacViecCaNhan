@@ -68,7 +68,7 @@
             </intent-filter>
         </receiver>
         <service
-            android:name=".model.SongService"
+            android:name=".service.SongService"
             android:enabled="true" />
 
     </application>

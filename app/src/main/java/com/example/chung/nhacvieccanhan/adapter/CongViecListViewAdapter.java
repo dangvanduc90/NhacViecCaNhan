@@ -82,6 +82,7 @@ public class CongViecListViewAdapter extends BaseAdapter {
 
         long congViecDateTimeMillis = AlarmHelper.converDateTimeMillis(congViec);
         long currentTime = new Date().getTime();
+        // so sánh thời gian hẹn giờ với lớn hơn thời gian hiện tai
         if (congViecDateTimeMillis > currentTime) {
             viewHolder.rowCongViec.setBackgroundColor(Color.WHITE);
         } else {

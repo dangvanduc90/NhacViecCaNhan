@@ -13,8 +13,8 @@ import com.example.chung.nhacvieccanhan.ultils.ConstClass;
 import com.example.chung.nhacvieccanhan.ultils.UtilLog;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
     private static final String TAG = "MainActivity";
+
     Button btnLoaiCongViec, btnCongViec, btnBanDo;
     static SQLite db;
 
