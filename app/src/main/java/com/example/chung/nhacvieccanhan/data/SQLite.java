@@ -39,7 +39,7 @@ public class SQLite extends SQLiteOpenHelper {
     }
 
     // return the number of rows affected
-    public long Update(String table, ContentValues values, long id) {
+    public int Update(String table, ContentValues values, long id) {
         SQLiteDatabase database = getWritableDatabase();
         return database.update(table, values, "id = " + id, null);
     }

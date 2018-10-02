@@ -23,8 +23,6 @@ public class AlarmScreenActivity extends AppCompatActivity {
 
     Button btnDismiss, btnSnooze;
     TextView tvAlarmTenCV, tvAlarmMoTaCV;
-    private List<Integer> soThoiGianLapList;
-    int countSnoozeAlarm;
     Cursor cursor;
 
     @Override
@@ -42,6 +40,7 @@ public class AlarmScreenActivity extends AppCompatActivity {
         String thoiGian = cursor.getString(4);
         String diaDiem = cursor.getString(5);
         int maLoaiCV = cursor.getInt(6);
+        int thoiGianLap = cursor.getInt(7);
 
         final CongViec congViec = new CongViec(
                 id,
@@ -50,22 +49,14 @@ public class AlarmScreenActivity extends AppCompatActivity {
                 ngay,
                 thoiGian,
                 diaDiem,
-                maLoaiCV);
+                maLoaiCV,
+                thoiGianLap
+        );
 
         initView();
 
         tvAlarmTenCV.setText(ten);
         tvAlarmMoTaCV.setText(moTa);
-
-        soThoiGianLapList = new ArrayList<>();
-        countSnoozeAlarm = 0;
-
-        Cursor cursor = MainActivity.db.GetData("SELECT * FROM ThoiGianLap");
-
-        while (cursor.moveToNext()) {
-            soThoiGianLapList.add(cursor.getInt(1));
-        }
-        cursor.close();
 
         btnDismiss.setOnClickListener(new View.OnClickListener() {
             @Override

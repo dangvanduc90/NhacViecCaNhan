@@ -2,6 +2,7 @@ package com.example.chung.nhacvieccanhan;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.chung.nhacvieccanhan.helpers.AlarmHelper;
 import com.example.chung.nhacvieccanhan.model.CongViec;
@@ -26,17 +28,16 @@ import java.util.List;
 public class SuaCongViecActivity extends AppCompatActivity {
     private static final String TAG = "SuaCongViecActivity";
 
-    ArrayAdapter arrayAdapter;
-
+    ArrayAdapter arrLoaiCongViec, arrThoiGianLap;
     EditText edtTen, edtMoTa, edtDate, edtTime, edtDiaDiem;
-    Spinner spnLoaiCV;
+    Spinner spnLoaiCV, spnThoiGianLap;
     Button btnDatePicker, btnTimePicker, btnSubmit, btnCancel;
-
     Calendar calendar;
     private int mYear, mMonth, mDay, mHour, mMinute;
     Cursor cursor;
-    int loaiCV;
-    int id;
+    int maLoaiCV, id, thoiGianLap;
+    List<String> tenLoaiCVList;
+    List<Integer> thoiGianLapList, maLoaiCVList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,13 +54,13 @@ public class SuaCongViecActivity extends AppCompatActivity {
         id = Integer.parseInt(intent.getStringExtra("id"));
 
         initView();
-
         calendar = Calendar.getInstance();
 
         cursor = MainActivity.db.GetData("SELECT * FROM LoaiCongViec");
 
-        final List<Integer> maLoaiCVList = new ArrayList<>();
-        List<String> tenLoaiCVList = new ArrayList<>();
+        maLoaiCVList = new ArrayList<>();
+        tenLoaiCVList = new ArrayList<>();
+        thoiGianLapList = new ArrayList<>();
 
         while (cursor.moveToNext()) {
             maLoaiCVList.add(cursor.getInt(0));
@@ -67,14 +68,33 @@ public class SuaCongViecActivity extends AppCompatActivity {
         }
         cursor.close();
 
-        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, tenLoaiCVList);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
-        spnLoaiCV.setAdapter(arrayAdapter);
+        for (int i = 0; i < 60; i++) {
+            thoiGianLapList.add(i);
+        }
+
+        arrLoaiCongViec = new ArrayAdapter(this, android.R.layout.simple_spinner_item, tenLoaiCVList);
+        arrLoaiCongViec.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+        spnLoaiCV.setAdapter(arrLoaiCongViec);
+
+        arrThoiGianLap = new ArrayAdapter(this, android.R.layout.simple_spinner_item, thoiGianLapList);
+        arrThoiGianLap.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+        spnThoiGianLap.setAdapter(arrThoiGianLap);
 
         spnLoaiCV.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                loaiCV = maLoaiCVList.get(position);
+                maLoaiCV = maLoaiCVList.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        spnThoiGianLap.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                thoiGianLap = thoiGianLapList.get(position);
             }
 
             @Override
@@ -90,7 +110,8 @@ public class SuaCongViecActivity extends AppCompatActivity {
         String ngay = cursor.getString(3);
         String thoiGian = cursor.getString(4);
         String diaDiem = cursor.getString(5);
-        int maLoaiCV = cursor.getInt(6);
+        maLoaiCV = cursor.getInt(6);
+        int ThoiGianLap = cursor.getInt(7);
 
         edtTen.setText(ten);
         edtMoTa.setText(moTa);
@@ -103,6 +124,11 @@ public class SuaCongViecActivity extends AppCompatActivity {
         for (int i = 0; i < maLoaiCVList.size(); i++) {
             if (maLoaiCVList.get(i) == maLoaiCV) {
                 spnLoaiCV.setSelection(i);
+            }
+        }
+        for (int i = 0; i < thoiGianLapList.size(); i++) {
+            if (thoiGianLapList.get(i) == ThoiGianLap) {
+                spnThoiGianLap.setSelection(i);
             }
         }
 
@@ -128,7 +154,7 @@ public class SuaCongViecActivity extends AppCompatActivity {
         btnTimePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mHour = calendar.get(Calendar.HOUR);
+                mHour = calendar.get(Calendar.HOUR_OF_DAY);
                 mMinute = calendar.get(Calendar.MINUTE);
                 TimePickerDialog timePickerDialog = new TimePickerDialog(SuaCongViecActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
@@ -151,8 +177,6 @@ public class SuaCongViecActivity extends AppCompatActivity {
                 String thoiGian = edtTime.getText().toString();
                 String diaDiem = edtDiaDiem.getText().toString();
 
-                MainActivity.db.QueryData("UPDATE CongViec SET TenCV = '" + ten + "', MoTa ='" + moTa + "', Ngay = '" + ngay + "', ThoiGian = '" + thoiGian + "', DiaDiem = '" + diaDiem + "', MaLoaiCV = " + loaiCV);
-
                 CongViec congViec = new CongViec(
                         id,
                         ten,
@@ -160,10 +184,28 @@ public class SuaCongViecActivity extends AppCompatActivity {
                         ngay,
                         thoiGian,
                         diaDiem,
-                        loaiCV);
-                AlarmHelper.deleteAlarm(SuaCongViecActivity.this, congViec);
-                AlarmHelper.createAlarm(SuaCongViecActivity.this, congViec);
-                startActivity(new Intent(SuaCongViecActivity.this, CongViecActivity.class));
+                        maLoaiCV,
+                        thoiGianLap
+                );
+
+                // Create a new map of values, where column names are the keys
+                ContentValues values = new ContentValues();
+                values.put("TenCV", ten);
+                values.put("MoTa", moTa);
+                values.put("Ngay", ngay);
+                values.put("ThoiGian", thoiGian);
+                values.put("DiaDiem", diaDiem);
+                values.put("MaLoaiCV", maLoaiCV);
+                values.put("ThoiGianLap", thoiGianLap);
+
+                int row_afftected = MainActivity.db.Update("CongViec", values, id);
+                if (row_afftected > 0) {
+                    AlarmHelper.deleteAlarm(SuaCongViecActivity.this, congViec);
+                    AlarmHelper.createAlarm(SuaCongViecActivity.this, congViec);
+                    startActivity(new Intent(SuaCongViecActivity.this, CongViecActivity.class));
+                } else {
+                    Toast.makeText(SuaCongViecActivity.this, "Update fail", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -182,6 +224,7 @@ public class SuaCongViecActivity extends AppCompatActivity {
         edtTime = (EditText) findViewById(R.id.edtTime);
         edtDiaDiem = (EditText) findViewById(R.id.edtDiaDiem);
         spnLoaiCV = (Spinner) findViewById(R.id.spnLoaiCV);
+        spnThoiGianLap = (Spinner) findViewById(R.id.spnThoiGianLap);
         btnDatePicker = (Button) findViewById(R.id.btnDatePicker);
         btnTimePicker = (Button) findViewById(R.id.btnTimePicker);
         btnSubmit = (Button) findViewById(R.id.btnSubmit);
@@ -190,7 +233,6 @@ public class SuaCongViecActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
             finish(); // close this activity and return to preview activity (if there is any)
         }

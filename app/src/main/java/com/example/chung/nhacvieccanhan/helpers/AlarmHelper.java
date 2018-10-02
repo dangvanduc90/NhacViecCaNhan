@@ -66,35 +66,5 @@ public class AlarmHelper {
     }
 
     public static void SnoozeAlarm(Context mContext, CongViec congViec) {
-        List<Integer> soThoiGianLapList = new ArrayList<>();
-        int countSnoozeAlarm = 0;
-        db = new SQLite(mContext, "NhacViecCaNhan.sqlite", null, ConstClass.VERSION_DATABASE);
-        Cursor cursor = db.GetData("SELECT * FROM ThoiGianLap");
-        while (cursor.moveToNext()) {
-            soThoiGianLapList.add(cursor.getInt(1));
-        }
-        cursor.close();
-
-        if (countSnoozeAlarm < soThoiGianLapList.size()) {
-            countSnoozeAlarm++;
-        } else {
-            countSnoozeAlarm = soThoiGianLapList.size() - 1;
-        }
-
-        AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(mContext, SongService.class);
-        intent.putExtra(EXTRA_ON_OF, ON);
-        intent.putExtra(INTENT_ID_CONGVIEC, congViec.getId());
-        PendingIntent pendingIntent = PendingIntent.getService(
-                mContext, (int) congViec.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT
-        );
-
-        long currentTime = Calendar.getInstance().getTimeInMillis();
-        long nextTime = currentTime + soThoiGianLapList.get(countSnoozeAlarm) * 60000;
-        UtilLog.log_d(TAG, currentTime + " currentTime");
-        UtilLog.log_d(TAG, nextTime + " nextTime");
-        if (soThoiGianLapList.size() > 0 && countSnoozeAlarm < soThoiGianLapList.size()) {
-            alarmManager.set(AlarmManager.RTC_WAKEUP, nextTime, pendingIntent);
-        }
     }
 }

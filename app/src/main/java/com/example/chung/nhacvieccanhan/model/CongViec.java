@@ -12,8 +12,9 @@ public class CongViec {
     private String Thoigian;
     private String DiaDiem;
     private int MaLoaiCV;
+    private int thoiGianLap;
 
-    public CongViec(long id, String tenCV, String moTa, String ngay, String thoigian, String diaDiem, int maLoaiCV) {
+    public CongViec(long id, String tenCV, String moTa, String ngay, String thoigian, String diaDiem, int maLoaiCV, int thoiGianLap) {
         this.id = id;
         this.TenCV = tenCV;
         this.MoTa = moTa;
@@ -21,22 +22,24 @@ public class CongViec {
         this.Thoigian = thoigian;
         this.DiaDiem = diaDiem;
         this.MaLoaiCV = maLoaiCV;
+        this.thoiGianLap = thoiGianLap;
     }
 
-    public CongViec(String tenCV, String moTa, String ngay, String thoigian, String diaDiem, int maLoaiCV) {
+    public CongViec(String tenCV, String moTa, String ngay, String thoigian, String diaDiem, int maLoaiCV, int thoiGianLap) {
         this.TenCV = tenCV;
         this.MoTa = moTa;
         this.Ngay = ngay;
         this.Thoigian = thoigian;
         this.DiaDiem = diaDiem;
         this.MaLoaiCV = maLoaiCV;
+        this.thoiGianLap = thoiGianLap;
     }
 
     public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -86,5 +89,13 @@ public class CongViec {
 
     public void setMaLoaiCV(int maLoaiCV) {
         MaLoaiCV = maLoaiCV;
+    }
+
+    public int getThoiGianLap() {
+        return thoiGianLap;
+    }
+
+    public void setThoiGianLap(int thoiGianLap) {
+        this.thoiGianLap = thoiGianLap;
     }
 }

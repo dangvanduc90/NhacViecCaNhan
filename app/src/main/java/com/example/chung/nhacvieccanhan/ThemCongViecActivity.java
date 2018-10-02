@@ -22,22 +22,19 @@ import com.example.chung.nhacvieccanhan.model.CongViec;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 public class ThemCongViecActivity extends AppCompatActivity {
-
     private final String TAG = "ThemCongViecActivity";
-    ArrayAdapter arrayAdapter;
 
+    ArrayAdapter arrLoaiCongViec, arrThoiGianLap;
     EditText edtTen, edtMoTa, edtDate, edtTime, edtDiaDiem;
-    Spinner spnLoaiCV;
+    Spinner spnLoaiCV, spnThoiGianLap;
     Button btnDatePicker, btnTimePicker, btnSubmit, btnCancel;
-
     Calendar calendar;
-    private int mYear, mMonth, mDay, mHour, mMinute;
-
-    int maLoaiCV;
+    private int mYear, mMonth, mDay, mHour, mMinute, maLoaiCV, thoiGianLap;
+    List<String> tenLoaiCVList;
+    List<Integer> thoiGianLapList, maLoaiCVList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,32 +46,55 @@ public class ThemCongViecActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        
+
         initView();
         calendar = Calendar.getInstance();
 
         Cursor cursor = MainActivity.db.GetData("SELECT * FROM LoaiCongViec");
 
-        final List<Integer> maLoaiCVList = new ArrayList<>();
-        List<String> tenLoaiCVList = new ArrayList<>();
+        maLoaiCVList = new ArrayList<>();
+        tenLoaiCVList = new ArrayList<>();
+        thoiGianLapList = new ArrayList<>();
 
         while (cursor.moveToNext()) {
             maLoaiCVList.add(cursor.getInt(0));
             tenLoaiCVList.add(cursor.getString(1));
         }
         cursor.close();
+
+        for (int i = 0; i < 60; i++) {
+            thoiGianLapList.add(i);
+        }
+
         if (maLoaiCVList.size() > 0) {
             maLoaiCV = maLoaiCVList.get(0);
         }
+        if (maLoaiCVList.size() > 0) {
+            thoiGianLap = thoiGianLapList.get(0);
+        }
 
-        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, tenLoaiCVList);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
-        spnLoaiCV.setAdapter(arrayAdapter);
+        arrLoaiCongViec = new ArrayAdapter(this, android.R.layout.simple_spinner_item, tenLoaiCVList);
+        arrLoaiCongViec.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+        spnLoaiCV.setAdapter(arrLoaiCongViec);
+
+        arrThoiGianLap = new ArrayAdapter(this, android.R.layout.simple_spinner_item, thoiGianLapList);
+        arrThoiGianLap.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+        spnThoiGianLap.setAdapter(arrThoiGianLap);
 
         spnLoaiCV.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 maLoaiCV = maLoaiCVList.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+        spnThoiGianLap.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                thoiGianLap = thoiGianLapList.get(position);
             }
 
             @Override
@@ -135,6 +155,7 @@ public class ThemCongViecActivity extends AppCompatActivity {
                 values.put("ThoiGian", thoiGian);
                 values.put("DiaDiem", diaDiem);
                 values.put("MaLoaiCV", maLoaiCV);
+                values.put("ThoiGianLap", thoiGianLap);
                 long id = MainActivity.db.Insert("CongViec", values);
 
                 CongViec congViec = new CongViec(
@@ -144,7 +165,8 @@ public class ThemCongViecActivity extends AppCompatActivity {
                         ngay,
                         thoiGian,
                         diaDiem,
-                        maLoaiCV);
+                        maLoaiCV,
+                        thoiGianLap);
 
                 AlarmHelper.createAlarm(ThemCongViecActivity.this, congViec);
                 startActivity(new Intent(ThemCongViecActivity.this, CongViecActivity.class));
@@ -166,6 +188,7 @@ public class ThemCongViecActivity extends AppCompatActivity {
         edtTime = (EditText) findViewById(R.id.edtTime);
         edtDiaDiem = (EditText) findViewById(R.id.edtDiaDiem);
         spnLoaiCV = (Spinner) findViewById(R.id.spnLoaiCV);
+        spnThoiGianLap = (Spinner) findViewById(R.id.spnThoiGianLap);
         btnDatePicker = (Button) findViewById(R.id.btnDatePicker);
         btnTimePicker = (Button) findViewById(R.id.btnTimePicker);
         btnSubmit = (Button) findViewById(R.id.btnSubmit);

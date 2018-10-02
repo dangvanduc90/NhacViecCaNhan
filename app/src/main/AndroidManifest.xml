@@ -39,10 +39,6 @@
             android:name=".CongViecActivity"
             android:label="@string/title_activity_cong_viec"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".ThoiGianLapActivity"
-            android:label="@string/title_activity_thoi_gian_lap"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ThemLoaiCongViecActivity" />
         <activity android:name=".SuaLoaiCongViecActivity" />
         <activity android:name=".ChiTietLoaiCongViecActivity" />
@@ -79,7 +75,6 @@
             android:enabled="true" />
 
         <activity android:name=".AlarmScreenActivity" />
-        <activity android:name=".ThemThoiGianLapActivity"></activity>
     </application>
 
 </manifest>

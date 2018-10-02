@@ -59,6 +59,7 @@ public class CongViecListViewAdapter extends BaseAdapter {
             viewHolder.tvThoiGianCongViec = (TextView) convertView.findViewById(R.id.tvThoiGianCongViec);
             viewHolder.tvTDiaDiemCongViec = (TextView) convertView.findViewById(R.id.tvDiaDiemCongViec);
             viewHolder.tvMaLoaiCongViec = (TextView) convertView.findViewById(R.id.tvMaLoaiCongViec);
+            viewHolder.tvThoiGianLap = (TextView) convertView.findViewById(R.id.tvThoiGianLap);
 
             convertView.setTag(viewHolder);
         } else {
@@ -72,6 +73,7 @@ public class CongViecListViewAdapter extends BaseAdapter {
         viewHolder.tvNgayCongViec.setText(congViec.getNgay());
         viewHolder.tvThoiGianCongViec.setText(congViec.getThoigian());
         viewHolder.tvTDiaDiemCongViec.setText(congViec.getDiaDiem());
+        viewHolder.tvThoiGianLap.setText("Lặp lai sau: " + congViec.getThoiGianLap() + " phút");
 
         Cursor cursor = db.GetData("SELECT * FROM LoaiCongViec where id = " + congViec.getMaLoaiCV());
         cursor.moveToFirst();
@@ -82,7 +84,7 @@ public class CongViecListViewAdapter extends BaseAdapter {
     }
 
     class ViewHolder {
-        TextView tvTenCongViec, tvMoTaCongViec, tvNgayCongViec, tvThoiGianCongViec, tvTDiaDiemCongViec, tvMaLoaiCongViec;
+        TextView tvTenCongViec, tvMoTaCongViec, tvNgayCongViec, tvThoiGianCongViec, tvTDiaDiemCongViec, tvMaLoaiCongViec, tvThoiGianLap;
     }
 
 }

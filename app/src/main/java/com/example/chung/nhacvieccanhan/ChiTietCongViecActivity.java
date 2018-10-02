@@ -60,7 +60,18 @@ public class ChiTietCongViecActivity extends AppCompatActivity {
         String thoiGian = cursor.getString(4);
         String diaDiem = cursor.getString(5);
         int maLoaiCV = cursor.getInt(6);
-        congViec = new CongViec(id, ten, moTa, ngay, thoiGian, diaDiem, maLoaiCV);
+        int thoiGianLap = cursor.getInt(7);
+
+        congViec = new CongViec(
+                id,
+                ten,
+                moTa,
+                ngay,
+                thoiGian,
+                diaDiem,
+                maLoaiCV,
+                thoiGianLap
+        );
         cursor.close();
 
         tvTenCV.setText(ten);

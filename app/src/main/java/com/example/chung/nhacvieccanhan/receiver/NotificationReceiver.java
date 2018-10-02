@@ -37,6 +37,7 @@ public class NotificationReceiver extends BroadcastReceiver {
             String thoiGian = cursor.getString(4);
             String diaDiem = cursor.getString(5);
             int maLoaiCV = cursor.getInt(6);
+            int thoiGianLap = cursor.getInt(7);
             CongViec congViec = new CongViec(
                     id,
                     ten,
@@ -44,7 +45,9 @@ public class NotificationReceiver extends BroadcastReceiver {
                     ngay,
                     thoiGian,
                     diaDiem,
-                    maLoaiCV);
+                    maLoaiCV,
+                    thoiGianLap
+            );
 
             switch (intent.getAction()) {
                 case ACTION_ON_TOAST:
