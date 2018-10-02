@@ -19,7 +19,6 @@ import com.example.chung.nhacvieccanhan.model.CongViec;
 import com.example.chung.nhacvieccanhan.ultils.ConstClass;
 
 public class ChiTietCongViecActivity extends AppCompatActivity {
-
     private static final String TAG = "ChiTietCongViecActivity";
 
     Button btnQuayLai;

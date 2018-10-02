@@ -20,9 +20,6 @@ public class LoaiCongViec {
         this.MoTaLoaiCV = moTaLoaiCV;
     }
 
-    public LoaiCongViec() {
-    }
-
     public int getId() {
         return id;
     }

@@ -31,15 +31,18 @@ public class SuaLoaiCongViecActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         final int id = Integer.parseInt(intent.getStringExtra("id"));
-        Toast.makeText(this, intent.getStringExtra("id") + "" , Toast.LENGTH_LONG).show();
-
         initView();
 
         Cursor cursor = MainActivity.db.GetData("SELECT * FROM LoaiCongViec where id =" + id);
         cursor.moveToFirst();
 
-        String ten = cursor.getString(1);
-        String moTa = cursor.getString(2);
+        loaiCongViec = new LoaiCongViec(
+                cursor.getInt(0),
+                cursor.getString(1),
+                cursor.getString(2)
+        );
+        String ten = loaiCongViec.getTenLoaiCV();
+        String moTa = loaiCongViec.getMoTaLoaiCV();
 
         edtTenLoaiCV.setText(ten);
         edtMoTaLoaiCV.setText(moTa);
