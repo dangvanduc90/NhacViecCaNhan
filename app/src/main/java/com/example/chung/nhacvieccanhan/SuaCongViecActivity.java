@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.chung.nhacvieccanhan.helpers.AlarmHelper;
 import com.example.chung.nhacvieccanhan.model.CongViec;
+import com.example.chung.nhacvieccanhan.ultils.ConstClass;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,7 +36,8 @@ public class SuaCongViecActivity extends AppCompatActivity {
     Calendar calendar;
     private int mYear, mMonth, mDay, mHour, mMinute;
     Cursor cursor;
-    int maLoaiCV, id, thoiGianLap;
+    int maLoaiCV, thoiGianLap;
+    long id;
     List<String> tenLoaiCVList;
     List<Integer> thoiGianLapList, maLoaiCVList;
 
@@ -51,7 +53,7 @@ public class SuaCongViecActivity extends AppCompatActivity {
         }
 
         Intent intent = getIntent();
-        id = Integer.parseInt(intent.getStringExtra("id"));
+        id = intent.getLongExtra(ConstClass.INTENT_ID_CONGVIEC, 0);
 
         initView();
         calendar = Calendar.getInstance();

@@ -160,15 +160,6 @@ public class ThemCongViecActivity extends AppCompatActivity {
                 values.put("ThoiGianLap", thoiGianLap);
                 long id = MainActivity.db.Insert("CongViec", values);
 
-                UtilLog.log_d(TAG, id + "");
-                UtilLog.log_d(TAG, ten);
-                UtilLog.log_d(TAG, moTa);
-                UtilLog.log_d(TAG, ngay);
-                UtilLog.log_d(TAG, thoiGian);
-                UtilLog.log_d(TAG, diaDiem);
-                UtilLog.log_d(TAG, maLoaiCV + "");
-                UtilLog.log_d(TAG, thoiGianLap + "");
-
                 CongViec congViec = new CongViec(
                         id,
                         ten,

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.AssetFileDescriptor;
+import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.MediaPlayer;
@@ -16,8 +17,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 
 import com.example.chung.nhacvieccanhan.ChiTietCongViecActivity;
+import com.example.chung.nhacvieccanhan.MainActivity;
 import com.example.chung.nhacvieccanhan.R;
 import com.example.chung.nhacvieccanhan.data.SQLite;
+import com.example.chung.nhacvieccanhan.model.CongViec;
 import com.example.chung.nhacvieccanhan.receiver.NotificationReceiver;
 import com.example.chung.nhacvieccanhan.ultils.ConstClass;
 import com.example.chung.nhacvieccanhan.ultils.UtilLog;
@@ -37,6 +40,8 @@ public class SongService extends Service {
     MediaPlayer player;
     private NotificationReceiver mNotification;
     static SQLite db;
+    long id;
+    CongViec congViec;
 
     @Nullable
     @Override
@@ -57,8 +62,32 @@ public class SongService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         String string_receive = intent.getExtras().getString(EXTRA_ON_OF);
-        long id = intent.getExtras().getLong(INTENT_ID_CONGVIEC);
+        id = intent.getExtras().getLong(INTENT_ID_CONGVIEC);
         db = new SQLite(getBaseContext(), ConstClass.DATABASE_NAME, null, ConstClass.DATABASE_VERSION);
+
+        Cursor cursor = db.GetData("SELECT * FROM CongViec where id = " + id);
+        cursor.moveToFirst();
+
+        String ten = cursor.getString(1);
+        String moTa = cursor.getString(2);
+        String ngay = cursor.getString(3);
+        String thoiGian = cursor.getString(4);
+        String diaDiem = cursor.getString(5);
+        int maLoaiCV = cursor.getInt(6);
+        int thoiGianLap = cursor.getInt(7);
+
+        congViec = new CongViec(
+                id,
+                ten,
+                moTa,
+                ngay,
+                thoiGian,
+                diaDiem,
+                maLoaiCV,
+                thoiGianLap
+        );
+        cursor.close();
+
         if (string_receive.equals(OFF)) {
             if (player != null) {
                 if (player.isPlaying()) {
@@ -86,8 +115,8 @@ public class SongService extends Service {
                         .setAutoCancel(false)
                         .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_clock))
                         .setColor(Color.BLUE)
-                        .setContentTitle("Bao thuc")
-                        .setContentText("Chuyen de thuc hanh")
+                        .setContentTitle("BTL Android")
+                        .setContentText(congViec.getTenCV())
                         .setDefaults(Notification.DEFAULT_ALL)
                         .setPriority(Notification.PRIORITY_MAX)
                         .setFullScreenIntent(null, true)
