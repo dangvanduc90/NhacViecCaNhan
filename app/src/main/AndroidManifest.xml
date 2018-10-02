@@ -67,14 +67,10 @@
                 <action android:name="STOP_ACTION" />
             </intent-filter>
         </receiver>
-
-
-
         <service
             android:name=".model.SongService"
             android:enabled="true" />
 
-        <activity android:name=".AlarmScreenActivity" />
     </application>
 
 </manifest>

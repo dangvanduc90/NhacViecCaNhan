@@ -27,7 +27,7 @@ public class NotificationReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (intent != null) {
             long id = intent.getExtras().getLong(INTENT_ID_CONGVIEC);
-            db = new SQLite(context, "NhacViecCaNhan.sqlite", null, ConstClass.VERSION_DATABASE);
+            db = new SQLite(context, ConstClass.DATABASE_NAME, null, ConstClass.DATABASE_VERSION);
             cursor = db.GetData("SELECT * FROM CongViec where id = " + id);
             cursor.moveToFirst();
 

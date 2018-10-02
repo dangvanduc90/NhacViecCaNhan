@@ -18,6 +18,7 @@ import android.widget.GridView;
 import com.example.chung.nhacvieccanhan.adapter.CongViecListViewAdapter;
 import com.example.chung.nhacvieccanhan.helpers.AlarmHelper;
 import com.example.chung.nhacvieccanhan.model.CongViec;
+import com.example.chung.nhacvieccanhan.ultils.ConstClass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,13 +97,13 @@ public class CongViecActivity extends AppCompatActivity {
             case R.id.detail:
                 congViec = congViecList.get(position);
                 intent = new Intent(CongViecActivity.this, ChiTietCongViecActivity.class);
-                intent.putExtra("id", congViec.getId() + "");
+                intent.putExtra(ConstClass.INTENT_ID_CONGVIEC, congViec.getId());
                 startActivity(intent);
                 break;
             case R.id.update:
                 congViec = congViecList.get(position);
                 intent = new Intent(CongViecActivity.this, SuaCongViecActivity.class);
-                intent.putExtra("id", congViec.getId() + "");
+                intent.putExtra(ConstClass.INTENT_ID_CONGVIEC, congViec.getId());
                 startActivity(intent);
                 break;
             case R.id.delete:

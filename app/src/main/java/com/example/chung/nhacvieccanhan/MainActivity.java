@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnBanDo.setOnClickListener(this);
 
         try {
-            db = new SQLite(MainActivity.this, "NhacViecCaNhan.sqlite", null, ConstClass.VERSION_DATABASE);
+            db = new SQLite(MainActivity.this, ConstClass.DATABASE_NAME, null, ConstClass.DATABASE_VERSION);
             // tao bang
             db.QueryData("DROP TABLE IF EXISTS LoaiCongViec");
             db.QueryData("DROP TABLE IF EXISTS CongViec");

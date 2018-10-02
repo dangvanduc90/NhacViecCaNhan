@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.chung.nhacvieccanhan.helpers.AlarmHelper;
 import com.example.chung.nhacvieccanhan.model.CongViec;
+import com.example.chung.nhacvieccanhan.ultils.ConstClass;
 
 public class ChiTietCongViecActivity extends AppCompatActivity {
 
@@ -25,7 +26,7 @@ public class ChiTietCongViecActivity extends AppCompatActivity {
     TextView tvTenCV, tvMoTaCV, tvDate, tvTime, tvDiaDiem, tvLoaiCV;
     CongViec congViec;
 
-    int id;
+    long id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class ChiTietCongViecActivity extends AppCompatActivity {
         }
 
         Intent intent = getIntent();
-        id = Integer.parseInt(intent.getStringExtra("id"));
+        id = intent.getLongExtra(ConstClass.INTENT_ID_CONGVIEC, 0);
 
         initView();
 

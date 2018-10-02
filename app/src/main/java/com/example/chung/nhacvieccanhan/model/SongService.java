@@ -11,14 +11,15 @@ import android.content.res.AssetFileDescriptor;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 
-import com.example.chung.nhacvieccanhan.AlarmScreenActivity;
+import com.example.chung.nhacvieccanhan.ChiTietCongViecActivity;
 import com.example.chung.nhacvieccanhan.R;
+import com.example.chung.nhacvieccanhan.data.SQLite;
 import com.example.chung.nhacvieccanhan.receiver.NotificationReceiver;
+import com.example.chung.nhacvieccanhan.ultils.ConstClass;
 import com.example.chung.nhacvieccanhan.ultils.UtilLog;
 
 import java.io.IOException;
@@ -35,6 +36,7 @@ public class SongService extends Service {
     private static final int MY_NOTIFICATION_ID = 12345;
     MediaPlayer player;
     private NotificationReceiver mNotification;
+    static SQLite db;
 
     @Nullable
     @Override
@@ -56,6 +58,7 @@ public class SongService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         String string_receive = intent.getExtras().getString(EXTRA_ON_OF);
         long id = intent.getExtras().getLong(INTENT_ID_CONGVIEC);
+        db = new SQLite(getBaseContext(), ConstClass.DATABASE_NAME, null, ConstClass.DATABASE_VERSION);
         if (string_receive.equals(OFF)) {
             if (player != null) {
                 if (player.isPlaying()) {
@@ -78,24 +81,22 @@ public class SongService extends Service {
                 mIntent2.putExtra(INTENT_ID_CONGVIEC, id);
                 PendingIntent pendingIntentOff = PendingIntent.getBroadcast(this, (int) id, mIntent2, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    Notification builder = new NotificationCompat.Builder(this)
-                            .setSmallIcon(R.drawable.ic_clock)
-                            .setAutoCancel(false)
-                            .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_clock))
-                            .setColor(Color.BLUE)
-                            .setContentTitle("Bao thuc")
-                            .setContentText("Chuyen de thuc hanh")
-                            .setDefaults(Notification.DEFAULT_ALL)
-                            .setPriority(Notification.PRIORITY_MAX)
-                            .setFullScreenIntent(null, true)
-                            .addAction(R.mipmap.snooze, "Snooze", pendingIntentOn)
-                            .addAction(R.mipmap.cancel, "Dismiss", pendingIntentOff)
-                            .build();
-                    NotificationManager notificationService =
-                            (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationService.notify(MY_NOTIFICATION_ID, builder);
-                }
+                Notification builder = new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_clock)
+                        .setAutoCancel(false)
+                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_clock))
+                        .setColor(Color.BLUE)
+                        .setContentTitle("Bao thuc")
+                        .setContentText("Chuyen de thuc hanh")
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setPriority(Notification.PRIORITY_MAX)
+                        .setFullScreenIntent(null, true)
+                        .addAction(R.mipmap.snooze, "Snooze", pendingIntentOn)
+                        .addAction(R.mipmap.cancel, "Dismiss", pendingIntentOff)
+                        .build();
+                NotificationManager notificationService =
+                        (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationService.notify(MY_NOTIFICATION_ID, builder);
 
                 AssetFileDescriptor descriptor = getAssets().openFd("nhac_chuong.mp3");
                 player.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength());
@@ -103,10 +104,10 @@ public class SongService extends Service {
                 player.prepare();
                 player.start();
 
-                Intent alarmIntent = new Intent(getBaseContext(), AlarmScreenActivity.class);
-                alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                alarmIntent.putExtra(INTENT_ID_CONGVIEC, id);
-                getApplication().startActivity(alarmIntent);
+                Intent mIntent = new Intent(getBaseContext(), ChiTietCongViecActivity.class);
+                mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mIntent.putExtra(INTENT_ID_CONGVIEC, id);
+                getApplication().startActivity(mIntent);
 
             } catch (IOException e) {
                 UtilLog.log_d(TAG, e.getMessage());
