@@ -7,7 +7,6 @@
     android:orientation="vertical"
     android:padding="10dp"
     tools:context="com.example.chung.nhacvieccanhan.MainActivity">
-
     <Button
         android:id="@+id/btnLoaiCongViec"
         android:text="Loại Công Việc"
@@ -18,10 +17,4 @@
         android:text="Công Việc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <Button
-        android:id="@+id/btnBanDo"
-        android:text="Bản Đồ"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
 </LinearLayout>

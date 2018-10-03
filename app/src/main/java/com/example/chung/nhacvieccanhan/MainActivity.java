@@ -14,7 +14,7 @@ import com.example.chung.nhacvieccanhan.ultils.UtilLog;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "MainActivity";
 
-    Button btnLoaiCongViec, btnCongViec, btnBanDo;
+    Button btnLoaiCongViec, btnCongViec;
     static SQLite db;
 
     @Override
@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initView();
         btnLoaiCongViec.setOnClickListener(this);
         btnCongViec.setOnClickListener(this);
-        btnBanDo.setOnClickListener(this);
 
         try {
             db = new SQLite(MainActivity.this, ConstClass.DATABASE_NAME, null, ConstClass.DATABASE_VERSION);
@@ -89,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initView() {
         btnLoaiCongViec = (Button) findViewById(R.id.btnLoaiCongViec);
         btnCongViec = (Button) findViewById(R.id.btnCongViec);
-        btnBanDo = (Button) findViewById(R.id.btnBanDo);
     }
 
     @Override
@@ -100,8 +98,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btnCongViec:
                 startActivity(new Intent(MainActivity.this, CongViecActivity.class));
-                break;
-            case R.id.btnBanDo:
                 break;
             default:
                 break;
