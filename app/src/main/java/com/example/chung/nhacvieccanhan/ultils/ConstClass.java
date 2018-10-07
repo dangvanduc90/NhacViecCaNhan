@@ -18,4 +18,5 @@ public class ConstClass {
     public static final String SNOOZE_SUCCESS = "Snooze Success";
     public static final String DATABASE_NAME = "NhacViecCaNhan.sqlite";
     public static final int DATABASE_VERSION = 1;
+    public static final int MY_NOTIFICATION_ID = 12345;
 }

@@ -8,10 +8,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.chung.nhacvieccanhan.data.SQLite;
+import com.example.chung.nhacvieccanhan.ultils.ConstClass;
+
 public class ThemLoaiCongViecActivity extends AppCompatActivity {
 
     EditText edtTenLoaiCV, edtMoTaLoaiCV;
     Button btnThem, btnHuy;
+    static SQLite db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +29,7 @@ public class ThemLoaiCongViecActivity extends AppCompatActivity {
         }
 
         initView();
+        db = new SQLite(this, ConstClass.DATABASE_NAME, null, ConstClass.DATABASE_VERSION);
 
         btnHuy.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,7 +43,7 @@ public class ThemLoaiCongViecActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String TenLoaiCV = edtTenLoaiCV.getText().toString();
                 String MoTaLoaiCV = edtMoTaLoaiCV.getText().toString();
-                MainActivity.db.QueryData("INSERT INTO LoaiCongViec VALUES (null, '"+TenLoaiCV+"', '"+MoTaLoaiCV+"')");
+                db.QueryData("INSERT INTO LoaiCongViec VALUES (null, '"+TenLoaiCV+"', '"+MoTaLoaiCV+"')");
                 onBackPressed();
             }
         });

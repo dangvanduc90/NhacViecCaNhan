@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.GridView;
 
 import com.example.chung.nhacvieccanhan.adapter.LoaiCongViecListViewAdapter;
+import com.example.chung.nhacvieccanhan.data.SQLite;
 import com.example.chung.nhacvieccanhan.model.LoaiCongViec;
 import com.example.chung.nhacvieccanhan.ultils.ConstClass;
 import com.example.chung.nhacvieccanhan.ultils.UtilLog;
@@ -30,6 +31,7 @@ public class LoaiCongViecActivity extends AppCompatActivity {
     GridView gridView;
     LoaiCongViecListViewAdapter adapter;
     List<LoaiCongViec> loaiCongViecList;
+    static SQLite db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class LoaiCongViecActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+        db = new SQLite(this, ConstClass.DATABASE_NAME, null, ConstClass.DATABASE_VERSION);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -54,7 +57,7 @@ public class LoaiCongViecActivity extends AppCompatActivity {
 
         loaiCongViecList = new ArrayList<>();
 
-        Cursor cursor = MainActivity.db.GetData("SELECT * FROM LoaiCongViec");
+        Cursor cursor = db.GetData("SELECT * FROM LoaiCongViec");
 
         while (cursor.moveToNext()) {
             loaiCongViecList.add(new LoaiCongViec(cursor.getInt(0), cursor.getString(1), cursor.getString(2)));
@@ -111,10 +114,10 @@ public class LoaiCongViecActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         LoaiCongViec loaiCongViec = loaiCongViecList.get(position);
-                        MainActivity.db.QueryData("DELETE FROM LoaiCongViec where id = " + loaiCongViec.getId());
+                        db.QueryData("DELETE FROM LoaiCongViec where id = " + loaiCongViec.getId());
 
                         loaiCongViecList.clear();
-                        Cursor cursor = MainActivity.db.GetData("SELECT * FROM LoaiCongViec");
+                        Cursor cursor = db.GetData("SELECT * FROM LoaiCongViec");
                         while (cursor.moveToNext()) {
                             loaiCongViecList.add(new LoaiCongViec(cursor.getInt(0), cursor.getString(1), cursor.getString(2)));
                         }
@@ -141,7 +144,7 @@ public class LoaiCongViecActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Cursor cursor = MainActivity.db.GetData("SELECT * FROM LoaiCongViec");
+        Cursor cursor = db.GetData("SELECT * FROM LoaiCongViec");
         loaiCongViecList.clear();
         while (cursor.moveToNext()) {
             loaiCongViecList.add(new LoaiCongViec(cursor.getInt(0), cursor.getString(1), cursor.getString(2)));

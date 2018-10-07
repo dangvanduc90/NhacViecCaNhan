@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.chung.nhacvieccanhan.data.SQLite;
 import com.example.chung.nhacvieccanhan.helpers.AlarmHelper;
 import com.example.chung.nhacvieccanhan.model.CongViec;
 import com.example.chung.nhacvieccanhan.ultils.ConstClass;
@@ -40,6 +41,8 @@ public class SuaCongViecActivity extends AppCompatActivity {
     long id;
     List<String> tenLoaiCVList;
     List<Integer> thoiGianLapList, maLoaiCVList;
+    CongViec congViec;
+    static SQLite db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +59,32 @@ public class SuaCongViecActivity extends AppCompatActivity {
         id = intent.getLongExtra(ConstClass.INTENT_ID_CONGVIEC, 0);
 
         initView();
-        calendar = Calendar.getInstance();
+        db = new SQLite(this, ConstClass.DATABASE_NAME, null, ConstClass.DATABASE_VERSION);
 
-        cursor = MainActivity.db.GetData("SELECT * FROM LoaiCongViec");
+        cursor = db.GetData("SELECT * FROM CongViec where id = " + id);
+        cursor.moveToFirst();
+
+        id = cursor.getLong(0);
+        String ten = cursor.getString(1);
+        String moTa = cursor.getString(2);
+        String ngay = cursor.getString(3);
+        String thoiGian = cursor.getString(4);
+        String diaDiem = cursor.getString(5);
+        maLoaiCV = cursor.getInt(6);
+        thoiGianLap = cursor.getInt(7);
+        congViec = new CongViec(id, ten, moTa, ngay, thoiGian, diaDiem, maLoaiCV, thoiGianLap);
+        calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(AlarmHelper.converDateTimeMillis(congViec));
+
+        edtTen.setText(ten);
+        edtMoTa.setText(moTa);
+        edtDate.setText(ngay);
+        edtTime.setText(thoiGian);
+        edtDiaDiem.setText(diaDiem);
+
+        cursor.close();
+
+        cursor = db.GetData("SELECT * FROM LoaiCongViec");
 
         maLoaiCVList = new ArrayList<>();
         tenLoaiCVList = new ArrayList<>();
@@ -103,33 +129,13 @@ public class SuaCongViecActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-
-        cursor = MainActivity.db.GetData("SELECT * FROM CongViec where id = " + id);
-        cursor.moveToFirst();
-
-        String ten = cursor.getString(1);
-        String moTa = cursor.getString(2);
-        String ngay = cursor.getString(3);
-        String thoiGian = cursor.getString(4);
-        String diaDiem = cursor.getString(5);
-        maLoaiCV = cursor.getInt(6);
-        int ThoiGianLap = cursor.getInt(7);
-
-        edtTen.setText(ten);
-        edtMoTa.setText(moTa);
-        edtDate.setText(ngay);
-        edtTime.setText(thoiGian);
-        edtDiaDiem.setText(diaDiem);
-
-        cursor.close();
-
         for (int i = 0; i < maLoaiCVList.size(); i++) {
             if (maLoaiCVList.get(i) == maLoaiCV) {
                 spnLoaiCV.setSelection(i);
             }
         }
         for (int i = 0; i < thoiGianLapList.size(); i++) {
-            if (thoiGianLapList.get(i) == ThoiGianLap) {
+            if (thoiGianLapList.get(i) == thoiGianLap) {
                 spnThoiGianLap.setSelection(i);
             }
         }
@@ -200,7 +206,7 @@ public class SuaCongViecActivity extends AppCompatActivity {
                 values.put("MaLoaiCV", maLoaiCV);
                 values.put("ThoiGianLap", thoiGianLap);
 
-                int row_afftected = MainActivity.db.Update("CongViec", values, id);
+                int row_afftected = db.Update("CongViec", values, id);
                 if (row_afftected > 0) {
                     AlarmHelper.deleteAlarm(SuaCongViecActivity.this, congViec);
                     AlarmHelper.createAlarm(SuaCongViecActivity.this, congViec);

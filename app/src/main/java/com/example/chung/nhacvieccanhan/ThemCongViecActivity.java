@@ -17,8 +17,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
+import com.example.chung.nhacvieccanhan.data.SQLite;
 import com.example.chung.nhacvieccanhan.helpers.AlarmHelper;
 import com.example.chung.nhacvieccanhan.model.CongViec;
+import com.example.chung.nhacvieccanhan.ultils.ConstClass;
 import com.example.chung.nhacvieccanhan.ultils.UtilLog;
 
 import java.util.ArrayList;
@@ -36,6 +38,7 @@ public class ThemCongViecActivity extends AppCompatActivity {
     private int mYear, mMonth, mDay, mHour, mMinute, maLoaiCV, thoiGianLap;
     List<String> tenLoaiCVList;
     List<Integer> thoiGianLapList, maLoaiCVList;
+    static SQLite db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +51,11 @@ public class ThemCongViecActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
+        db = new SQLite(this, ConstClass.DATABASE_NAME, null, ConstClass.DATABASE_VERSION);
         initView();
         calendar = Calendar.getInstance();
 
-        Cursor cursor = MainActivity.db.GetData("SELECT * FROM LoaiCongViec");
+        Cursor cursor = db.GetData("SELECT * FROM LoaiCongViec");
 
         maLoaiCVList = new ArrayList<>();
         tenLoaiCVList = new ArrayList<>();
@@ -158,7 +162,7 @@ public class ThemCongViecActivity extends AppCompatActivity {
                 values.put("DiaDiem", diaDiem);
                 values.put("MaLoaiCV", maLoaiCV);
                 values.put("ThoiGianLap", thoiGianLap);
-                long id = MainActivity.db.Insert("CongViec", values);
+                long id = db.Insert("CongViec", values);
 
                 CongViec congViec = new CongViec(
                         id,

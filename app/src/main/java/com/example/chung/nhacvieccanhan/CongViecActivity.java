@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 
 import com.example.chung.nhacvieccanhan.adapter.CongViecListViewAdapter;
+import com.example.chung.nhacvieccanhan.data.SQLite;
 import com.example.chung.nhacvieccanhan.helpers.AlarmHelper;
 import com.example.chung.nhacvieccanhan.model.CongViec;
 import com.example.chung.nhacvieccanhan.ultils.ConstClass;
@@ -34,6 +35,7 @@ public class CongViecActivity extends AppCompatActivity {
     Button btnSearch;
     EditText edtKeyword;
     CongViecListViewAdapter adapter;
+    static SQLite db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class CongViecActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
+        db = new SQLite(this, ConstClass.DATABASE_NAME, null, ConstClass.DATABASE_VERSION);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,12 +62,12 @@ public class CongViecActivity extends AppCompatActivity {
         congViecList = new ArrayList<>();
         mCongViecList = new ArrayList<>();
 
-        Cursor cursor = MainActivity.db.GetData("SELECT * FROM CongViec");
+        Cursor cursor = db.GetData("SELECT * FROM CongViec");
 
         while (cursor.moveToNext()) {
             congViecList.add(
                     new CongViec(
-                            cursor.getInt(0),
+                            cursor.getLong(0),
                             cursor.getString(1),
                             cursor.getString(2),
                             cursor.getString(3),
@@ -78,7 +81,7 @@ public class CongViecActivity extends AppCompatActivity {
         mCongViecList.addAll(congViecList);
 
         initView();
-        adapter = new CongViecListViewAdapter(this, R.layout.row_cong_viec, congViecList, MainActivity.db);
+        adapter = new CongViecListViewAdapter(this, R.layout.row_cong_viec, congViecList, db);
         registerForContextMenu(gridView);
 
         gridView.setAdapter(adapter);
@@ -99,7 +102,6 @@ public class CongViecActivity extends AppCompatActivity {
                 } else {
                     congViecList.addAll(mCongViecList);
                 }
-                UtilLog.log_d(TAG, congViecList.size() + "");
                 adapter.notifyDataSetChanged();
             }
         });
@@ -151,14 +153,14 @@ public class CongViecActivity extends AppCompatActivity {
                 builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        MainActivity.db.QueryData("DELETE FROM CongViec where id = " + congViecList.get(position).getId());
+                        db.QueryData("DELETE FROM CongViec where id = " + congViecList.get(position).getId());
                         AlarmHelper.deleteAlarm(CongViecActivity.this, congViecList.get(position));
                         congViecList.clear();
-                        Cursor cursor = MainActivity.db.GetData("SELECT * FROM CongViec");
+                        Cursor cursor = db.GetData("SELECT * FROM CongViec");
                         while (cursor.moveToNext()) {
                             congViecList.add(
                                     new CongViec(
-                                            cursor.getInt(0),
+                                            cursor.getLong(0),
                                             cursor.getString(1),
                                             cursor.getString(2),
                                             cursor.getString(3),
@@ -191,7 +193,7 @@ public class CongViecActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Cursor cursor = MainActivity.db.GetData("SELECT * FROM CongViec");
+        Cursor cursor = db.GetData("SELECT * FROM CongViec");
         congViecList.clear();
         while (cursor.moveToNext()) {
             congViecList.add(

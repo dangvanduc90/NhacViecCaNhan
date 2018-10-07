@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.chung.nhacvieccanhan.data.SQLite;
 import com.example.chung.nhacvieccanhan.model.LoaiCongViec;
 import com.example.chung.nhacvieccanhan.ultils.ConstClass;
 
@@ -18,6 +19,7 @@ public class SuaLoaiCongViecActivity extends AppCompatActivity {
     Button btnSua, btnHuy;
     LoaiCongViec loaiCongViec;
     long id;
+    static SQLite db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +35,9 @@ public class SuaLoaiCongViecActivity extends AppCompatActivity {
         Intent intent = getIntent();
         id = intent.getLongExtra(ConstClass.INTENT_ID_LOADICONGVIEC, 0);
         initView();
+        db = new SQLite(this, ConstClass.DATABASE_NAME, null, ConstClass.DATABASE_VERSION);
 
-        Cursor cursor = MainActivity.db.GetData("SELECT * FROM LoaiCongViec where id =" + id);
+        Cursor cursor = db.GetData("SELECT * FROM LoaiCongViec where id =" + id);
         cursor.moveToFirst();
 
         loaiCongViec = new LoaiCongViec(
@@ -60,7 +63,7 @@ public class SuaLoaiCongViecActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String TenLoaiCV = edtTenLoaiCV.getText().toString();
                 String MoTaLoaiCV = edtMoTaLoaiCV.getText().toString();
-                MainActivity.db.QueryData("UPDATE LoaiCongViec SET TenLoaiCV = '"+TenLoaiCV+"', MoTaLoaiCV = '"+MoTaLoaiCV+"' where id = " + id);
+                db.QueryData("UPDATE LoaiCongViec SET TenLoaiCV = '"+TenLoaiCV+"', MoTaLoaiCV = '"+MoTaLoaiCV+"' where id = " + id);
                 onBackPressed();
             }
         });

@@ -14,9 +14,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.chung.nhacvieccanhan.data.SQLite;
 import com.example.chung.nhacvieccanhan.helpers.AlarmHelper;
 import com.example.chung.nhacvieccanhan.model.CongViec;
 import com.example.chung.nhacvieccanhan.ultils.ConstClass;
+import com.example.chung.nhacvieccanhan.ultils.UtilLog;
 
 public class ChiTietCongViecActivity extends AppCompatActivity {
     private static final String TAG = "ChiTietCongViecActivity";
@@ -24,8 +26,8 @@ public class ChiTietCongViecActivity extends AppCompatActivity {
     Button btnQuayLai;
     TextView tvTenCV, tvMoTaCV, tvDate, tvTime, tvDiaDiem, tvLoaiCV;
     CongViec congViec;
-
     long id;
+    static SQLite db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class ChiTietCongViecActivity extends AppCompatActivity {
         Intent intent = getIntent();
         id = intent.getLongExtra(ConstClass.INTENT_ID_CONGVIEC, 0);
 
+        db = new SQLite(this, ConstClass.DATABASE_NAME, null, ConstClass.DATABASE_VERSION);
         initView();
 
         btnQuayLai.setOnClickListener(new View.OnClickListener() {
@@ -50,10 +53,10 @@ public class ChiTietCongViecActivity extends AppCompatActivity {
             }
         });
 
-        Cursor cursor = MainActivity.db.GetData("SELECT * FROM CongViec where id = " + id);
+        Cursor cursor = db.GetData("SELECT * FROM CongViec where id = " + id);
         cursor.moveToFirst();
 
-        int id = cursor.getInt(0);
+        long id = cursor.getLong(0);
         String ten = cursor.getString(1);
         String moTa = cursor.getString(2);
         String ngay = cursor.getString(3);
@@ -80,7 +83,7 @@ public class ChiTietCongViecActivity extends AppCompatActivity {
         tvTime.setText(thoiGian);
         tvDiaDiem.setText(diaDiem);
 
-        Cursor cursorQr = MainActivity.db.GetData("SELECT * FROM LoaiCongViec where id = " + maLoaiCV);
+        Cursor cursorQr = db.GetData("SELECT * FROM LoaiCongViec where id = " + maLoaiCV);
         cursorQr.moveToFirst();
         String tenLoaiCV = cursorQr.getString(1);
         cursorQr.close();

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.chung.nhacvieccanhan.data.SQLite;
 import com.example.chung.nhacvieccanhan.ultils.ConstClass;
 
 public class ChiTietLoaiCongViecActivity extends AppCompatActivity {
@@ -16,6 +17,7 @@ public class ChiTietLoaiCongViecActivity extends AppCompatActivity {
     EditText edtTenLoaiCV, edtMoTaLoaiCV;
     Button btnQuayLai;
     long id;
+    static SQLite db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,7 @@ public class ChiTietLoaiCongViecActivity extends AppCompatActivity {
         Intent intent = getIntent();
         id = intent.getLongExtra(ConstClass.INTENT_ID_LOADICONGVIEC, 0);
 
+        db = new SQLite(this, ConstClass.DATABASE_NAME, null, ConstClass.DATABASE_VERSION);
         initView();
 
         btnQuayLai.setOnClickListener(new View.OnClickListener() {
@@ -40,7 +43,7 @@ public class ChiTietLoaiCongViecActivity extends AppCompatActivity {
             }
         });
 
-        Cursor cursor = MainActivity.db.GetData("SELECT * FROM LoaiCongViec where id = " + id);
+        Cursor cursor = db.GetData("SELECT * FROM LoaiCongViec where id = " + id);
         cursor.moveToFirst();
 
         String ten = cursor.getString(1);

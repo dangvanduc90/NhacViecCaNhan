@@ -36,7 +36,6 @@ import static com.example.chung.nhacvieccanhan.ultils.ConstClass.OFF;
 public class SongService extends Service {
     private static final String TAG = "SongService";
 
-    private static final int MY_NOTIFICATION_ID = 12345;
     MediaPlayer player;
     private NotificationReceiver mNotification;
     static SQLite db;
@@ -118,15 +117,16 @@ public class SongService extends Service {
                         .setContentTitle("BTL Android")
                         .setContentText(congViec.getTenCV())
                         .setDefaults(Notification.DEFAULT_ALL)
-                        .setPriority(Notification.PRIORITY_MAX)
+                        .setPriority(Notification.PRIORITY_DEFAULT)
                         .setFullScreenIntent(null, true)
                         .addAction(R.mipmap.snooze, "Snooze", pendingIntentOn)
                         .addAction(R.mipmap.cancel, "Dismiss", pendingIntentOff)
+                        .setAutoCancel(true)
                         .build();
                 NotificationManager notificationService =
                         (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationService.notify(MY_NOTIFICATION_ID, builder);
-//                startForeground(MY_NOTIFICATION_ID, builder);
+                notificationService.notify(ConstClass.MY_NOTIFICATION_ID, builder);
+                startForeground(ConstClass.MY_NOTIFICATION_ID, builder);
 
                 AssetFileDescriptor descriptor = getAssets().openFd("nhac_chuong.mp3");
                 player.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength());
