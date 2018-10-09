@@ -11,6 +11,9 @@ import com.example.chung.nhacvieccanhan.data.SQLite;
 import com.example.chung.nhacvieccanhan.ultils.ConstClass;
 import com.example.chung.nhacvieccanhan.ultils.UtilLog;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "MainActivity";
 
@@ -38,8 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "TenCV VARCHAR, " +
                     "MoTa VARCHAR, " +
-                    "Ngay date, " +
-                    "ThoiGian time, " +
+                    "ThoiGian INTEGER, " +
                     "DiaDiem VARCHAR, " +
                     "MaLoaiCV INTEGER," +
                     "ThoiGianLap INTEGER" +
@@ -47,13 +49,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             db.QueryData("INSERT INTO LoaiCongViec VALUES (1, 'mua dien thoai samsung j3 ex', '12312323a')");
             db.QueryData("INSERT INTO LoaiCongViec VALUES (2, 'mua dien thoai samsung j3 null', '12312323a')");
 
-//             add record
             db.QueryData("INSERT INTO CongViec VALUES (" +
                     "1, " +
                     "'đi mua điện thoại', " +
                     "'mô tả công viêc mua điện thoại', " +
-                    "'2-10-2018', " +
-                    "'21:25', " +
+                    "1539097140003, " +
                     "'định công'," +
                     "1," +
                     "0" +
@@ -62,8 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     "2, " +
                     "'đi mua quần áo', " +
                     "'mô tả mua quần áo', " +
-                    "'8-9-2018', " +
-                    "'21:25', " +
+                    "1539097140003, " +
                     "'định công2'," +
                     "1," +
                     "0" +
@@ -73,8 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     "3, " +
                     "'đi mua laptop', " +
                     "'mô tả công viêc mua laptop', " +
-                    "'5-9-2018', " +
-                    "'21:25', " +
+                    "1539097140003, " +
                     "'định công3'," +
                     "1," +
                     "0" +

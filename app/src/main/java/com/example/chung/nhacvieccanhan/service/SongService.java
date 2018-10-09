@@ -17,7 +17,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 
 import com.example.chung.nhacvieccanhan.ChiTietCongViecActivity;
-import com.example.chung.nhacvieccanhan.MainActivity;
 import com.example.chung.nhacvieccanhan.R;
 import com.example.chung.nhacvieccanhan.data.SQLite;
 import com.example.chung.nhacvieccanhan.model.CongViec;
@@ -26,12 +25,6 @@ import com.example.chung.nhacvieccanhan.ultils.ConstClass;
 import com.example.chung.nhacvieccanhan.ultils.UtilLog;
 
 import java.io.IOException;
-
-import static com.example.chung.nhacvieccanhan.ultils.ConstClass.ACTION_OFF_TOAST;
-import static com.example.chung.nhacvieccanhan.ultils.ConstClass.ACTION_ON_TOAST;
-import static com.example.chung.nhacvieccanhan.ultils.ConstClass.EXTRA_ON_OF;
-import static com.example.chung.nhacvieccanhan.ultils.ConstClass.INTENT_ID_CONGVIEC;
-import static com.example.chung.nhacvieccanhan.ultils.ConstClass.OFF;
 
 public class SongService extends Service {
     private static final String TAG = "SongService";
@@ -53,15 +46,15 @@ public class SongService extends Service {
         super.onCreate();
         mNotification = new NotificationReceiver();
         IntentFilter mFilter = new IntentFilter();
-        mFilter.addAction(ACTION_ON_TOAST);
-        mFilter.addAction(ACTION_OFF_TOAST);
+        mFilter.addAction(ConstClass.ACTION_ON_TOAST);
+        mFilter.addAction(ConstClass.ACTION_OFF_TOAST);
         registerReceiver(mNotification, mFilter);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        String string_receive = intent.getExtras().getString(EXTRA_ON_OF);
-        id = intent.getExtras().getLong(INTENT_ID_CONGVIEC);
+        String string_receive = intent.getExtras().getString(ConstClass.EXTRA_ON_OF, null);
+        id = intent.getExtras().getLong(ConstClass.INTENT_ID_CONGVIEC);
         db = new SQLite(getBaseContext(), ConstClass.DATABASE_NAME, null, ConstClass.DATABASE_VERSION);
 
         Cursor cursor = db.GetData("SELECT * FROM CongViec where id = " + id);
@@ -69,17 +62,15 @@ public class SongService extends Service {
 
         String ten = cursor.getString(1);
         String moTa = cursor.getString(2);
-        String ngay = cursor.getString(3);
-        String thoiGian = cursor.getString(4);
-        String diaDiem = cursor.getString(5);
-        int maLoaiCV = cursor.getInt(6);
-        int thoiGianLap = cursor.getInt(7);
+        long thoiGian = cursor.getLong(3);
+        String diaDiem = cursor.getString(4);
+        int maLoaiCV = cursor.getInt(5);
+        int thoiGianLap = cursor.getInt(6);
 
         congViec = new CongViec(
                 id,
                 ten,
                 moTa,
-                ngay,
                 thoiGian,
                 diaDiem,
                 maLoaiCV,
@@ -87,7 +78,7 @@ public class SongService extends Service {
         );
         cursor.close();
 
-        if (string_receive.equals(OFF)) {
+        if (string_receive == ConstClass.OFF) {
             if (player != null) {
                 if (player.isPlaying()) {
                     player.stop();
@@ -100,13 +91,13 @@ public class SongService extends Service {
             player = new MediaPlayer();
             try {
                 Intent mIntent1 = new Intent();
-                mIntent1.setAction(ACTION_ON_TOAST);
-                mIntent1.putExtra(INTENT_ID_CONGVIEC, id);
+                mIntent1.setAction(ConstClass.ACTION_ON_TOAST);
+                mIntent1.putExtra(ConstClass.INTENT_ID_CONGVIEC, id);
                 PendingIntent pendingIntentOn = PendingIntent.getBroadcast(this, (int) id, mIntent1, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 Intent mIntent2 = new Intent();
-                mIntent2.setAction(ACTION_OFF_TOAST);
-                mIntent2.putExtra(INTENT_ID_CONGVIEC, id);
+                mIntent2.setAction(ConstClass.ACTION_OFF_TOAST);
+                mIntent2.putExtra(ConstClass.INTENT_ID_CONGVIEC, id);
                 PendingIntent pendingIntentOff = PendingIntent.getBroadcast(this, (int) id, mIntent2, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 Notification builder = new NotificationCompat.Builder(this)
@@ -117,7 +108,6 @@ public class SongService extends Service {
                         .setContentTitle("BTL Android")
                         .setContentText(congViec.getTenCV())
                         .setDefaults(Notification.DEFAULT_ALL)
-                        .setPriority(Notification.PRIORITY_DEFAULT)
                         .setFullScreenIntent(null, true)
                         .addAction(R.mipmap.snooze, "Snooze", pendingIntentOn)
                         .addAction(R.mipmap.cancel, "Dismiss", pendingIntentOff)
@@ -136,7 +126,7 @@ public class SongService extends Service {
 
                 Intent mIntent = new Intent(getBaseContext(), ChiTietCongViecActivity.class);
                 mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mIntent.putExtra(INTENT_ID_CONGVIEC, id);
+                mIntent.putExtra(ConstClass.INTENT_ID_CONGVIEC, id);
                 getApplication().startActivity(mIntent);
 
             } catch (IOException e) {

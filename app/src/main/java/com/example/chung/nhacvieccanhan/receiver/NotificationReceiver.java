@@ -21,28 +21,26 @@ import static com.example.chung.nhacvieccanhan.ultils.ConstClass.SNOOZE_SUCCESS;
 public class NotificationReceiver extends BroadcastReceiver {
     private static final String TAG = "NotificationReceiver";
     static SQLite db;
-    private Cursor cursor;
+    Cursor cursor;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent != null) {
-            long id = intent.getExtras().getLong(INTENT_ID_CONGVIEC);
+            long id = intent.getExtras().getLong(INTENT_ID_CONGVIEC, 0);
             db = new SQLite(context, ConstClass.DATABASE_NAME, null, ConstClass.DATABASE_VERSION);
             cursor = db.GetData("SELECT * FROM CongViec where id = " + id);
             cursor.moveToFirst();
 
             String ten = cursor.getString(1);
             String moTa = cursor.getString(2);
-            String ngay = cursor.getString(3);
-            String thoiGian = cursor.getString(4);
-            String diaDiem = cursor.getString(5);
-            int maLoaiCV = cursor.getInt(6);
-            int thoiGianLap = cursor.getInt(7);
+            long thoiGian = cursor.getLong(3);
+            String diaDiem = cursor.getString(4);
+            int maLoaiCV = cursor.getInt(5);
+            int thoiGianLap = cursor.getInt(6);
             CongViec congViec = new CongViec(
                     id,
                     ten,
                     moTa,
-                    ngay,
                     thoiGian,
                     diaDiem,
                     maLoaiCV,

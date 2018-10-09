@@ -40,6 +40,12 @@ public class FilterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
 
+        // add back arrow to toolbar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
         initView();
         db = new SQLite(this, ConstClass.DATABASE_NAME, null, ConstClass.DATABASE_VERSION);
         congViecList = new ArrayList<>();
@@ -47,7 +53,7 @@ public class FilterActivity extends AppCompatActivity {
 
         registerForContextMenu(gridView);
 
-        adapter = new CongViecListViewAdapter(this, R.layout.row_cong_viec, congViecList, db);
+        adapter = new CongViecListViewAdapter(this, congViecList, db);
         gridView.setAdapter(adapter);
 
         String arr[] = getResources().getStringArray(R.array.testArray);
@@ -86,15 +92,13 @@ public class FilterActivity extends AppCompatActivity {
                                     cursor.getInt(0),
                                     cursor.getString(1),
                                     cursor.getString(2),
-                                    cursor.getString(3),
+                                    cursor.getLong(3),
                                     cursor.getString(4),
-                                    cursor.getString(5),
-                                    cursor.getInt(6),
-                                    cursor.getInt(7)
+                                    cursor.getInt(5),
+                                    cursor.getInt(6)
                             )
                     );
                 }
-                UtilLog.log_d(TAG, congViecList.size() + "- congViecList size");
                 adapter.notifyDataSetChanged();
             }
         });

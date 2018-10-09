@@ -8,6 +8,7 @@ import android.content.Intent;
 import com.example.chung.nhacvieccanhan.model.CongViec;
 import com.example.chung.nhacvieccanhan.service.SongService;
 import com.example.chung.nhacvieccanhan.receiver.AlarmReceiver;
+import com.example.chung.nhacvieccanhan.ultils.UtilLog;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,19 +22,25 @@ import static com.example.chung.nhacvieccanhan.ultils.ConstClass.ON;
 public class AlarmHelper {
     private static final String TAG = "AlarmHelper";
 
-    public static long converDateTimeMillis(CongViec congViec) {
-        Date mDate = null;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        try {
-            mDate = dateFormat.parse(congViec.getNgay());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        int hours = Integer.parseInt(congViec.getThoigian().split(":")[0]);
-        int minutes = Integer.parseInt(congViec.getThoigian().split(":")[1]);
-        mDate.setHours(hours);
-        mDate.setMinutes(minutes);
-        return mDate.getTime();
+    public static String formatDateTime(CongViec congViec) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date mDate = new Date();
+        mDate.setTime(congViec.getThoigian());
+        return simpleDateFormat.format(mDate);
+    }
+
+    public static String formatDate(CongViec congViec) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date mDate = new Date();
+        mDate.setTime(congViec.getThoigian());
+        return simpleDateFormat.format(mDate);
+    }
+
+    public static String formatTime(CongViec congViec) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+        Date mDate = new Date();
+        mDate.setTime(congViec.getThoigian());
+        return simpleDateFormat.format(mDate);
     }
 
     public static void deleteAlarm(Context mContext, CongViec congViec) {
@@ -56,7 +63,7 @@ public class AlarmHelper {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 mContext, (int) congViec.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT
         );
-        long congViecDateTimeMillis = converDateTimeMillis(congViec);
+        long congViecDateTimeMillis = congViec.getThoigian();
         long currentTime = new Date().getTime();
         // thời gian hẹn giờ phải lớn hơn thời gian hiện tai
         if (congViecDateTimeMillis > currentTime) {
@@ -74,7 +81,7 @@ public class AlarmHelper {
                     mContext, (int) congViec.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT
             );
 
-            long congViecDateTimeMillis = converDateTimeMillis(congViec);
+            long congViecDateTimeMillis = congViec.getThoigian();
             long nextTime = congViecDateTimeMillis + congViec.getThoiGianLap() * 60000;
 
 //        Calendar cal = Calendar.getInstance();

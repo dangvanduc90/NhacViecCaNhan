@@ -70,18 +70,17 @@ public class CongViecActivity extends AppCompatActivity {
                             cursor.getLong(0),
                             cursor.getString(1),
                             cursor.getString(2),
-                            cursor.getString(3),
+                            cursor.getLong(3),
                             cursor.getString(4),
-                            cursor.getString(5),
-                            cursor.getInt(6),
-                            cursor.getInt(7)
+                            cursor.getInt(5),
+                            cursor.getInt(6)
                     ));
         }
         cursor.close();
         mCongViecList.addAll(congViecList);
 
         initView();
-        adapter = new CongViecListViewAdapter(this, R.layout.row_cong_viec, congViecList, db);
+        adapter = new CongViecListViewAdapter(this, congViecList, db);
         registerForContextMenu(gridView);
 
         gridView.setAdapter(adapter);
@@ -163,11 +162,10 @@ public class CongViecActivity extends AppCompatActivity {
                                             cursor.getLong(0),
                                             cursor.getString(1),
                                             cursor.getString(2),
-                                            cursor.getString(3),
+                                            cursor.getLong(3),
                                             cursor.getString(4),
-                                            cursor.getString(5),
-                                            cursor.getInt(6),
-                                            cursor.getInt(7)
+                                            cursor.getInt(5),
+                                            cursor.getInt(6)
                                     ));
                         }
                         adapter.notifyDataSetChanged();
@@ -201,11 +199,10 @@ public class CongViecActivity extends AppCompatActivity {
                             cursor.getInt(0),
                             cursor.getString(1),
                             cursor.getString(2),
-                            cursor.getString(3),
+                            cursor.getLong(3),
                             cursor.getString(4),
-                            cursor.getString(5),
-                            cursor.getInt(6),
-                            cursor.getInt(7)
+                            cursor.getInt(5),
+                            cursor.getInt(6)
                     ));
         }
         cursor.close();

@@ -22,9 +22,11 @@ import com.example.chung.nhacvieccanhan.data.SQLite;
 import com.example.chung.nhacvieccanhan.helpers.AlarmHelper;
 import com.example.chung.nhacvieccanhan.model.CongViec;
 import com.example.chung.nhacvieccanhan.ultils.ConstClass;
+import com.example.chung.nhacvieccanhan.ultils.UtilLog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class SuaCongViecActivity extends AppCompatActivity {
@@ -67,19 +69,23 @@ public class SuaCongViecActivity extends AppCompatActivity {
         id = cursor.getLong(0);
         String ten = cursor.getString(1);
         String moTa = cursor.getString(2);
-        String ngay = cursor.getString(3);
-        String thoiGian = cursor.getString(4);
-        String diaDiem = cursor.getString(5);
-        maLoaiCV = cursor.getInt(6);
-        thoiGianLap = cursor.getInt(7);
-        congViec = new CongViec(id, ten, moTa, ngay, thoiGian, diaDiem, maLoaiCV, thoiGianLap);
+        long thoiGian = cursor.getLong(3);
+        String diaDiem = cursor.getString(4);
+        maLoaiCV = cursor.getInt(5);
+        thoiGianLap = cursor.getInt(6);
+        congViec = new CongViec(id, ten, moTa, thoiGian, diaDiem, maLoaiCV, thoiGianLap);
         calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(AlarmHelper.converDateTimeMillis(congViec));
+        calendar.setTimeInMillis(congViec.getThoigian());
+        mYear = calendar.get(Calendar.YEAR);
+        mMonth = calendar.get(Calendar.MONTH);
+        mDay = calendar.get(Calendar.DAY_OF_MONTH);
+        mHour = calendar.get(Calendar.HOUR_OF_DAY);
+        mMinute = calendar.get(Calendar.MINUTE);
 
         edtTen.setText(ten);
         edtMoTa.setText(moTa);
-        edtDate.setText(ngay);
-        edtTime.setText(thoiGian);
+        edtDate.setText(AlarmHelper.formatDate(congViec));
+        edtTime.setText(AlarmHelper.formatTime(congViec));
         edtDiaDiem.setText(diaDiem);
 
         cursor.close();
@@ -143,9 +149,6 @@ public class SuaCongViecActivity extends AppCompatActivity {
         btnDatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mYear = calendar.get(Calendar.YEAR);
-                mMonth = calendar.get(Calendar.MONTH);
-                mDay = calendar.get(Calendar.DATE);
                 DatePickerDialog datePickerDialog = new DatePickerDialog(SuaCongViecActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -162,8 +165,6 @@ public class SuaCongViecActivity extends AppCompatActivity {
         btnTimePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mHour = calendar.get(Calendar.HOUR_OF_DAY);
-                mMinute = calendar.get(Calendar.MINUTE);
                 TimePickerDialog timePickerDialog = new TimePickerDialog(SuaCongViecActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -179,32 +180,26 @@ public class SuaCongViecActivity extends AppCompatActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String ten = edtTen.getText().toString();
-                String moTa = edtMoTa.getText().toString();
-                String ngay = edtDate.getText().toString();
-                String thoiGian = edtTime.getText().toString();
-                String diaDiem = edtDiaDiem.getText().toString();
+                calendar.set(mYear, mMonth, mDay, mHour, mMinute, 0);
 
                 CongViec congViec = new CongViec(
                         id,
-                        ten,
-                        moTa,
-                        ngay,
-                        thoiGian,
-                        diaDiem,
+                        edtTen.getText().toString(),
+                        edtMoTa.getText().toString(),
+                        calendar.getTimeInMillis(),
+                        edtDiaDiem.getText().toString(),
                         maLoaiCV,
                         thoiGianLap
                 );
 
                 // Create a new map of values, where column names are the keys
                 ContentValues values = new ContentValues();
-                values.put("TenCV", ten);
-                values.put("MoTa", moTa);
-                values.put("Ngay", ngay);
-                values.put("ThoiGian", thoiGian);
-                values.put("DiaDiem", diaDiem);
-                values.put("MaLoaiCV", maLoaiCV);
-                values.put("ThoiGianLap", thoiGianLap);
+                values.put("TenCV", congViec.getTenCV());
+                values.put("MoTa", congViec.getMoTa());
+                values.put("ThoiGian", congViec.getThoigian());
+                values.put("DiaDiem", congViec.getDiaDiem());
+                values.put("MaLoaiCV", congViec.getMaLoaiCV());
+                values.put("ThoiGianLap", congViec.getThoiGianLap());
 
                 int row_afftected = db.Update("CongViec", values, id);
                 if (row_afftected > 0) {

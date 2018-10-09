@@ -59,17 +59,15 @@ public class ChiTietCongViecActivity extends AppCompatActivity {
         long id = cursor.getLong(0);
         String ten = cursor.getString(1);
         String moTa = cursor.getString(2);
-        String ngay = cursor.getString(3);
-        String thoiGian = cursor.getString(4);
-        String diaDiem = cursor.getString(5);
-        int maLoaiCV = cursor.getInt(6);
-        int thoiGianLap = cursor.getInt(7);
+        long thoiGian = cursor.getLong(3);
+        String diaDiem = cursor.getString(4);
+        int maLoaiCV = cursor.getInt(5);
+        int thoiGianLap = cursor.getInt(6);
 
         congViec = new CongViec(
                 id,
                 ten,
                 moTa,
-                ngay,
                 thoiGian,
                 diaDiem,
                 maLoaiCV,
@@ -79,8 +77,7 @@ public class ChiTietCongViecActivity extends AppCompatActivity {
 
         tvTenCV.setText(ten);
         tvMoTaCV.setText(moTa);
-        tvDate.setText(ngay);
-        tvTime.setText(thoiGian);
+        tvTime.setText(AlarmHelper.formatDateTime(congViec));
         tvDiaDiem.setText(diaDiem);
 
         Cursor cursorQr = db.GetData("SELECT * FROM LoaiCongViec where id = " + maLoaiCV);

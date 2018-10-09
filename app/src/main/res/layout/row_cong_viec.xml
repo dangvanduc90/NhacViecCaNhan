@@ -24,11 +24,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <TextView
-        android:id="@+id/tvNgayCongViec"
-        android:text="ngaycong viec"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <TextView
         android:id="@+id/tvThoiGianCongViec"
         android:text="thoi gian cong viec"
         android:layout_width="match_parent"

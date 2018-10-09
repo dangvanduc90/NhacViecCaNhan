@@ -8,27 +8,24 @@ public class CongViec {
     private long id;
     private String TenCV;
     private String MoTa;
-    private String Ngay;
-    private String Thoigian;
+    private long Thoigian;
     private String DiaDiem;
     private int MaLoaiCV;
     private int thoiGianLap;
 
-    public CongViec(long id, String tenCV, String moTa, String ngay, String thoigian, String diaDiem, int maLoaiCV, int thoiGianLap) {
+    public CongViec(long id, String tenCV, String moTa, long thoigian, String diaDiem, int maLoaiCV, int thoiGianLap) {
         this.id = id;
         this.TenCV = tenCV;
         this.MoTa = moTa;
-        this.Ngay = ngay;
         this.Thoigian = thoigian;
         this.DiaDiem = diaDiem;
         this.MaLoaiCV = maLoaiCV;
         this.thoiGianLap = thoiGianLap;
     }
 
-    public CongViec(String tenCV, String moTa, String ngay, String thoigian, String diaDiem, int maLoaiCV, int thoiGianLap) {
+    public CongViec(String tenCV, String moTa, long thoigian, String diaDiem, int maLoaiCV, int thoiGianLap) {
         this.TenCV = tenCV;
         this.MoTa = moTa;
-        this.Ngay = ngay;
         this.Thoigian = thoigian;
         this.DiaDiem = diaDiem;
         this.MaLoaiCV = maLoaiCV;
@@ -59,19 +56,11 @@ public class CongViec {
         MoTa = moTa;
     }
 
-    public String getNgay() {
-        return Ngay;
-    }
-
-    public void setNgay(String ngay) {
-        Ngay = ngay;
-    }
-
-    public String getThoigian() {
+    public long getThoigian() {
         return Thoigian;
     }
 
-    public void setThoigian(String thoigian) {
+    public void setThoigian(long thoigian) {
         Thoigian = thoigian;
     }
 

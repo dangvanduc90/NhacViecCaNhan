@@ -3,7 +3,6 @@ package com.example.chung.nhacvieccanhan;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -54,6 +53,11 @@ public class ThemCongViecActivity extends AppCompatActivity {
         db = new SQLite(this, ConstClass.DATABASE_NAME, null, ConstClass.DATABASE_VERSION);
         initView();
         calendar = Calendar.getInstance();
+        mYear = calendar.get(Calendar.YEAR);
+        mMonth = calendar.get(Calendar.MONTH);
+        mDay = calendar.get(Calendar.DAY_OF_MONTH);
+        mHour = calendar.get(Calendar.HOUR_OF_DAY);
+        mMinute = calendar.get(Calendar.MINUTE);
 
         Cursor cursor = db.GetData("SELECT * FROM LoaiCongViec");
 
@@ -111,9 +115,6 @@ public class ThemCongViecActivity extends AppCompatActivity {
         btnDatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mYear = calendar.get(Calendar.YEAR);
-                mMonth = calendar.get(Calendar.MONTH);
-                mDay = calendar.get(Calendar.DATE);
                 DatePickerDialog datePickerDialog = new DatePickerDialog(ThemCongViecActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -130,8 +131,6 @@ public class ThemCongViecActivity extends AppCompatActivity {
         btnTimePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mHour = calendar.get(Calendar.HOUR_OF_DAY);
-                mMinute = calendar.get(Calendar.MINUTE);
                 TimePickerDialog timePickerDialog = new TimePickerDialog(ThemCongViecActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -147,32 +146,28 @@ public class ThemCongViecActivity extends AppCompatActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String ten = edtTen.getText().toString();
-                String moTa = edtMoTa.getText().toString();
-                String ngay = edtDate.getText().toString();
-                String thoiGian = edtTime.getText().toString();
-                String diaDiem = edtDiaDiem.getText().toString();
+                calendar.set(mYear, mMonth, mDay, mHour, mMinute, 0);
+
+                CongViec congViec = new CongViec(
+                        edtTen.getText().toString(),
+                        edtMoTa.getText().toString(),
+                        calendar.getTimeInMillis(),
+                        edtDiaDiem.getText().toString(),
+                        maLoaiCV,
+                        thoiGianLap
+                );
 
                 // Create a new map of values, where column names are the keys
                 ContentValues values = new ContentValues();
-                values.put("TenCV", ten);
-                values.put("MoTa", moTa);
-                values.put("Ngay", ngay);
-                values.put("ThoiGian", thoiGian);
-                values.put("DiaDiem", diaDiem);
-                values.put("MaLoaiCV", maLoaiCV);
-                values.put("ThoiGianLap", thoiGianLap);
-                long id = db.Insert("CongViec", values);
+                values.put("TenCV", congViec.getTenCV());
+                values.put("MoTa", congViec.getMoTa());
+                values.put("ThoiGian", congViec.getThoigian());
+                values.put("DiaDiem", congViec.getDiaDiem());
+                values.put("MaLoaiCV", congViec.getMaLoaiCV());
+                values.put("ThoiGianLap", congViec.getThoiGianLap());
 
-                CongViec congViec = new CongViec(
-                        id,
-                        ten,
-                        moTa,
-                        ngay,
-                        thoiGian,
-                        diaDiem,
-                        maLoaiCV,
-                        thoiGianLap);
+                long id = db.Insert("CongViec", values);
+                congViec.setId(id);
 
                 AlarmHelper.createAlarm(ThemCongViecActivity.this, congViec);
                 onBackPressed();
