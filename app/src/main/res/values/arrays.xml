@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="testArray">
+        <item>Thứ tự tên(A - Z)</item>
+        <item>Thứ tự tên(Z - A)</item>
+        <item>Còn hạn</item>
+        <item>Hết hạn</item>
+        <item>Ngày tạo(trước kia - gần đây)</item>
+        <item>Ngày tạo(gần đây - trước kia)</item>
+    </array>
+</resources>

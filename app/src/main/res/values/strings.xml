@@ -6,5 +6,6 @@
     <string name="huy">Hủy</string>
     <string name="back">Quay về</string>
     <string name="delete">Xóa</string>
-    <string name="search">Search</string>
+    <string name="search">Tìm kiếm</string>
+    <string name="filter">Lọc</string>
 </resources>

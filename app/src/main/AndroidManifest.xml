@@ -30,16 +30,19 @@
         <activity android:name=".ThemCongViecActivity" />
         <activity android:name=".SuaCongViecActivity" />
         <activity android:name=".ChiTietCongViecActivity" />
+
         <receiver android:name=".receiver.AlarmReceiver">
             <intent-filter>
                 <action android:name="YES_ACTION" />
                 <action android:name="STOP_ACTION" />
             </intent-filter>
         </receiver>
+
         <service
             android:name=".service.SongService"
             android:enabled="true" />
 
+        <activity android:name=".FilterActivity"></activity>
     </application>
 
 </manifest>

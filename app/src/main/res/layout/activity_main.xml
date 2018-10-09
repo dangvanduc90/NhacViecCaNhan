@@ -17,4 +17,10 @@
         android:text="Công Việc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btnFilter"
+        android:text="Bộ lọc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>
