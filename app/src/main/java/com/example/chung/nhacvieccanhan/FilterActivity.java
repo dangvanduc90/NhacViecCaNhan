@@ -121,8 +121,10 @@ public class FilterActivity extends AppCompatActivity {
                 queryClause += " ORDER BY TenCV DESC";
                 break;
             case 2:
+                queryClause += " and ThoiGian >= " + System.currentTimeMillis();
                 break;
             case 3:
+                queryClause += " and ThoiGian < " + System.currentTimeMillis();
                 break;
             case 4:
                 break;
