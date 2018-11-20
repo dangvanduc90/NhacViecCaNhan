@@ -78,7 +78,7 @@ public class SongService extends Service {
         );
         cursor.close();
 
-        if (string_receive == ConstClass.OFF) {
+        if (string_receive.equals(ConstClass.OFF)) {
             if (player != null) {
                 if (player.isPlaying()) {
                     player.stop();
@@ -90,6 +90,13 @@ public class SongService extends Service {
         } else {
             player = new MediaPlayer();
             try {
+                Intent mIntent = new Intent(getBaseContext(), ChiTietCongViecActivity.class);
+                mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mIntent.putExtra(ConstClass.INTENT_ID_CONGVIEC, id);
+                mIntent.putExtra(ConstClass.INTENT_FROM_SERVICE, true);
+                PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                        mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
                 Intent mIntent1 = new Intent();
                 mIntent1.setAction(ConstClass.ACTION_ON_TOAST);
                 mIntent1.putExtra(ConstClass.INTENT_ID_CONGVIEC, id);
@@ -112,9 +119,12 @@ public class SongService extends Service {
                         .addAction(R.mipmap.snooze, "Snooze", pendingIntentOn)
                         .addAction(R.mipmap.cancel, "Dismiss", pendingIntentOff)
                         .setAutoCancel(true)
+                        .setContentIntent(contentIntent)
                         .build();
                 NotificationManager notificationService =
                         (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+                // Hide the notification after its selected
+                builder.flags |= Notification.FLAG_AUTO_CANCEL;
                 notificationService.notify(ConstClass.MY_NOTIFICATION_ID, builder);
                 startForeground(ConstClass.MY_NOTIFICATION_ID, builder);
 
@@ -124,10 +134,11 @@ public class SongService extends Service {
                 player.prepare();
                 player.start();
 
-                Intent mIntent = new Intent(getBaseContext(), ChiTietCongViecActivity.class);
-                mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mIntent.putExtra(ConstClass.INTENT_ID_CONGVIEC, id);
-                getApplication().startActivity(mIntent);
+//                Intent mIntent = new Intent(getBaseContext(), ChiTietCongViecActivity.class);
+//                mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                mIntent.putExtra(ConstClass.INTENT_ID_CONGVIEC, id);
+//                mIntent.putExtra(ConstClass.INTENT_FROM_SERVICE, true);
+//                getApplication().startActivity(mIntent);
 
             } catch (IOException e) {
                 UtilLog.log_d(TAG, e.getMessage());

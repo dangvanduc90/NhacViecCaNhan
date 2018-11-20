@@ -8,6 +8,7 @@ public class ConstClass {
     public static final float ZOOM_MAP = 16.0f;
     public static final String INTENT_ID_CONGVIEC = "intent_id_congviec";
     public static final String INTENT_ID_LOADICONGVIEC = "intent_id_loadicongviec";
+    public static final String INTENT_FROM_SERVICE = "intent_from_service";
     public static final String EXTRA_ON_OF = "extra_on_of";
     public static final String ON = "on";
     public static final String OFF = "off";

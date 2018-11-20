@@ -27,6 +27,7 @@ public class ChiTietCongViecActivity extends AppCompatActivity {
     TextView tvTenCV, tvMoTaCV, tvDate, tvTime, tvDiaDiem, tvLoaiCV;
     CongViec congViec;
     long id;
+    boolean isFromService;
     static SQLite db;
 
     @Override
@@ -42,6 +43,7 @@ public class ChiTietCongViecActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         id = intent.getLongExtra(ConstClass.INTENT_ID_CONGVIEC, 0);
+        isFromService = intent.getBooleanExtra(ConstClass.INTENT_FROM_SERVICE, false);
 
         db = new SQLite(this, ConstClass.DATABASE_NAME, null, ConstClass.DATABASE_VERSION);
         initView();
@@ -139,7 +141,11 @@ public class ChiTietCongViecActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            finish();
+            if (isFromService) {
+                startActivity(new Intent(this, MainActivity.class));
+            } else {
+                finish();
+            }
         }
         return super.onOptionsItemSelected(item);
     }
