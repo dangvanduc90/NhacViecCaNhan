@@ -3,6 +3,7 @@ package com.example.chung.nhacvieccanhan;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -33,7 +34,7 @@ public class FilterActivity extends AppCompatActivity {
     private int idFilterBy = 0;
     static SQLite db;
     Cursor cursor;
-    private List<CongViec> congViecList, mCongViecList;
+    private List<CongViec> congViecList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,6 @@ public class FilterActivity extends AppCompatActivity {
         initView();
         db = new SQLite(this, ConstClass.DATABASE_NAME, null, ConstClass.DATABASE_VERSION);
         congViecList = new ArrayList<>();
-        mCongViecList = new ArrayList<>();
 
         registerForContextMenu(gridView);
 
@@ -83,7 +83,7 @@ public class FilterActivity extends AppCompatActivity {
             public void onClick(View view) {
                 keyword = edtKeyword.getText().toString();
                 String queryClause = generateQueryClause(keyword, idFilterBy);
-                Cursor cursor = db.GetData(queryClause);
+                cursor = db.GetData(queryClause);
 
                 congViecList.clear();
                 while (cursor.moveToNext()) {
@@ -134,5 +134,15 @@ public class FilterActivity extends AppCompatActivity {
                 break;
         }
         return queryClause;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // close this activity and return to preview activity (if there is any)
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
