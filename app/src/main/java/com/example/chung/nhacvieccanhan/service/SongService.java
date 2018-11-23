@@ -57,27 +57,6 @@ public class SongService extends Service {
         id = intent.getExtras().getLong(ConstClass.INTENT_ID_CONGVIEC);
         db = new SQLite(getBaseContext(), ConstClass.DATABASE_NAME, null, ConstClass.DATABASE_VERSION);
 
-        Cursor cursor = db.GetData("SELECT * FROM CongViec where id = " + id);
-        cursor.moveToFirst();
-
-        String ten = cursor.getString(1);
-        String moTa = cursor.getString(2);
-        long thoiGian = cursor.getLong(3);
-        String diaDiem = cursor.getString(4);
-        int maLoaiCV = cursor.getInt(5);
-        int thoiGianLap = cursor.getInt(6);
-
-        congViec = new CongViec(
-                id,
-                ten,
-                moTa,
-                thoiGian,
-                diaDiem,
-                maLoaiCV,
-                thoiGianLap
-        );
-        cursor.close();
-
         if (string_receive.equals(ConstClass.OFF)) {
             if (player != null) {
                 if (player.isPlaying()) {
@@ -87,9 +66,36 @@ public class SongService extends Service {
                     player = null;
                 }
             }
+
+            NotificationManager notifManager = (NotificationManager) getBaseContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            notifManager.cancelAll();
+//            stopForeground(Service.STOP_FOREGROUND_REMOVE);
+            stopForeground(true);
+
         } else {
-            player = new MediaPlayer();
             try {
+                player = new MediaPlayer();
+                Cursor cursor = db.GetData("SELECT * FROM CongViec where id = " + id);
+                cursor.moveToFirst();
+
+                String ten = cursor.getString(1);
+                String moTa = cursor.getString(2);
+                long thoiGian = cursor.getLong(3);
+                String diaDiem = cursor.getString(4);
+                int maLoaiCV = cursor.getInt(5);
+                int thoiGianLap = cursor.getInt(6);
+
+                congViec = new CongViec(
+                        id,
+                        ten,
+                        moTa,
+                        thoiGian,
+                        diaDiem,
+                        maLoaiCV,
+                        thoiGianLap
+                );
+                cursor.close();
+
                 Intent mIntent = new Intent(getBaseContext(), ChiTietCongViecActivity.class);
                 mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mIntent.putExtra(ConstClass.INTENT_ID_CONGVIEC, id);
@@ -109,7 +115,7 @@ public class SongService extends Service {
 
                 Notification builder = new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_clock)
-                        .setAutoCancel(false)
+                        .setAutoCancel(true)
                         .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_clock))
                         .setColor(Color.BLUE)
                         .setContentTitle("BTL Android")
@@ -118,7 +124,6 @@ public class SongService extends Service {
                         .setFullScreenIntent(null, true)
                         .addAction(R.mipmap.snooze, "Snooze", pendingIntentOn)
                         .addAction(R.mipmap.cancel, "Dismiss", pendingIntentOff)
-                        .setAutoCancel(true)
                         .setContentIntent(contentIntent)
                         .build();
                 NotificationManager notificationService =

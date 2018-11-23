@@ -152,8 +152,8 @@ public class CongViecActivity extends AppCompatActivity {
                 builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        db.QueryData("DELETE FROM CongViec where id = " + congViecList.get(position).getId());
                         AlarmHelper.deleteAlarm(CongViecActivity.this, congViecList.get(position));
+                        db.QueryData("DELETE FROM CongViec where id = " + congViecList.get(position).getId());
                         congViecList.clear();
                         Cursor cursor = db.GetData("SELECT * FROM CongViec");
                         while (cursor.moveToNext()) {
