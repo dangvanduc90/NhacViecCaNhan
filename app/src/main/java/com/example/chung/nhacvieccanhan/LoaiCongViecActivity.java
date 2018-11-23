@@ -114,14 +114,31 @@ public class LoaiCongViecActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         LoaiCongViec loaiCongViec = loaiCongViecList.get(position);
-                        db.QueryData("DELETE FROM LoaiCongViec where id = " + loaiCongViec.getId());
 
-                        loaiCongViecList.clear();
-                        Cursor cursor = db.GetData("SELECT * FROM LoaiCongViec");
-                        while (cursor.moveToNext()) {
-                            loaiCongViecList.add(new LoaiCongViec(cursor.getInt(0), cursor.getString(1), cursor.getString(2)));
+                        if (countCongViecByLoaiCongViec(loaiCongViec.getId()) > 0) {
+                            new AlertDialog.Builder(LoaiCongViecActivity.this)
+                                    .setTitle("Không thể xóa")
+                                    .setMessage("Loại công việc còn chứa công việc. Vui lòng xóa hết công việc trước khi xóa loại công việc")
+                                    .setCancelable(true)
+                                    .show();
+                        } else {
+                            db.QueryData("DELETE FROM LoaiCongViec where id = " + loaiCongViec.getId());
+                            loaiCongViecList.clear();
+                            Cursor cursor = db.GetData("SELECT * FROM LoaiCongViec");
+                            while (cursor.moveToNext()) {
+                                loaiCongViecList.add(new LoaiCongViec(cursor.getInt(0), cursor.getString(1), cursor.getString(2)));
+                            }
+                            adapter.notifyDataSetChanged();
+                            db.QueryData("DELETE FROM LoaiCongViec where id = " + loaiCongViec.getId());
+                            loaiCongViecList.clear();
+                            cursor = db.GetData("SELECT * FROM LoaiCongViec");
+                            while (cursor.moveToNext()) {
+                                loaiCongViecList.add(new LoaiCongViec(cursor.getInt(0), cursor.getString(1), cursor.getString(2)));
+                            }
+                            adapter.notifyDataSetChanged();
                         }
-                        adapter.notifyDataSetChanged();
+
+
                     }
                 });
                 builder.show();
@@ -130,6 +147,13 @@ public class LoaiCongViecActivity extends AppCompatActivity {
                 break;
         }
         return super.onContextItemSelected(item);
+    }
+
+    private int countCongViecByLoaiCongViec(long idLoaiCongViec) {
+        String query = "select count (id) as count from CongViec where MaLoaiCV = " + idLoaiCongViec;
+        Cursor cursor = db.GetData(query);
+        cursor.moveToFirst();
+        return cursor.getInt(0);
     }
 
     @Override
