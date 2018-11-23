@@ -1,6 +1,7 @@
 package com.example.chung.nhacvieccanhan.helpers;
 
 import android.app.AlarmManager;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -49,6 +50,10 @@ public class AlarmHelper {
         Intent intent = new Intent(mContext, SongService.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, (int) congViec.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.cancel(pendingIntent);
+
+//        NotificationManager notifManager= (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+//        notifManager.cancelAll();
+
         intent.putExtra(EXTRA_ON_OF, OFF);
         intent.putExtra(INTENT_ID_CONGVIEC, congViec.getId());
         mContext.startService(intent);

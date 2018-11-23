@@ -84,9 +84,12 @@ public class CongViecListViewAdapter extends BaseAdapter {
             viewHolder.rowCongViec.setBackgroundColor(Color.GREEN);
         }
         Cursor cursor = db.GetData("SELECT * FROM LoaiCongViec where id = " + congViec.getMaLoaiCV());
-        cursor.moveToFirst();
-        String ten = cursor.getString(1);
-        viewHolder.tvMaLoaiCongViec.setText(ten);
+
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            String ten = cursor.getString(1);
+            viewHolder.tvMaLoaiCongViec.setText(ten);
+        }
 
         return convertView;
     }
