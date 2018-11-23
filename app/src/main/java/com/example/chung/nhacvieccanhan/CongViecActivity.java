@@ -90,8 +90,8 @@ public class CongViecActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String keyword = edtKeyword.getText().toString().trim();
                 int text_length = keyword.length();
+                congViecList.clear();
                 if (text_length > 0) {
-                    congViecList.clear();
                     for (int i = 0; i < mCongViecList.size(); i++) {
                         CongViec mCongViec = mCongViecList.get(i);
                         if (mCongViec.getTenCV().toLowerCase().contains(keyword.toLowerCase())) {
