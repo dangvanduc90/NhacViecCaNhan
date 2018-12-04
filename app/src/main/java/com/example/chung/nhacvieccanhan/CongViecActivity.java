@@ -62,23 +62,6 @@ public class CongViecActivity extends AppCompatActivity {
         congViecList = new ArrayList<>();
         mCongViecList = new ArrayList<>();
 
-        Cursor cursor = db.GetData("SELECT * FROM CongViec");
-
-        while (cursor.moveToNext()) {
-            congViecList.add(
-                    new CongViec(
-                            cursor.getLong(0),
-                            cursor.getString(1),
-                            cursor.getString(2),
-                            cursor.getLong(3),
-                            cursor.getString(4),
-                            cursor.getInt(5),
-                            cursor.getInt(6)
-                    ));
-        }
-        cursor.close();
-        mCongViecList.addAll(congViecList);
-
         initView();
         adapter = new CongViecListViewAdapter(this, congViecList, db);
         registerForContextMenu(gridView);
@@ -104,6 +87,28 @@ public class CongViecActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Cursor cursor = db.GetData("SELECT * FROM CongViec");
+
+        while (cursor.moveToNext()) {
+            congViecList.add(
+                    new CongViec(
+                            cursor.getLong(0),
+                            cursor.getString(1),
+                            cursor.getString(2),
+                            cursor.getLong(3),
+                            cursor.getString(4),
+                            cursor.getInt(5),
+                            cursor.getInt(6)
+                    ));
+        }
+        cursor.close();
+        mCongViecList.addAll(congViecList);
     }
 
     private void initView() {
