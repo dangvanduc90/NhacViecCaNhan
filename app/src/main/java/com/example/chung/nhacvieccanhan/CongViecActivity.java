@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.example.chung.nhacvieccanhan.adapter.CongViecListViewAdapter;
 import com.example.chung.nhacvieccanhan.data.SQLite;
@@ -32,7 +35,6 @@ public class CongViecActivity extends AppCompatActivity {
 
     private List<CongViec> congViecList, mCongViecList;
     GridView gridView;
-    Button btnSearch;
     EditText edtKeyword;
     CongViecListViewAdapter adapter;
     static SQLite db;
@@ -68,10 +70,22 @@ public class CongViecActivity extends AppCompatActivity {
 
         gridView.setAdapter(adapter);
 
-        btnSearch.setOnClickListener(new View.OnClickListener() {
+        edtKeyword.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                String keyword = edtKeyword.getText().toString().trim();
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String keyword = editable.toString();
+                UtilLog.log_d(TAG, keyword);
+//                String keyword = edtKeyword.getText().toString().trim();
                 int text_length = keyword.length();
                 congViecList.clear();
                 if (text_length > 0) {
@@ -109,12 +123,14 @@ public class CongViecActivity extends AppCompatActivity {
         }
         cursor.close();
         mCongViecList.addAll(congViecList);
+
+        int count = countCongViec();
+        Toast.makeText(CongViecActivity.this, "Hiện tại có tất cả " + count + " công việc", Toast.LENGTH_SHORT).show();
     }
 
     private void initView() {
         gridView = (GridView) findViewById(R.id.gridView);
         edtKeyword = (EditText) findViewById(R.id.edtKeyword);
-        btnSearch = (Button) findViewById(R.id.btnSearch);
     }
 
     @Override
@@ -174,6 +190,9 @@ public class CongViecActivity extends AppCompatActivity {
                                     ));
                         }
                         adapter.notifyDataSetChanged();
+
+                        int count = countCongViec();
+                        Toast.makeText(CongViecActivity.this, "Hiện tại có tất cả " + count + " công việc", Toast.LENGTH_SHORT).show();
                     }
                 });
                 builder.show();
@@ -212,5 +231,12 @@ public class CongViecActivity extends AppCompatActivity {
         }
         cursor.close();
         adapter.notifyDataSetChanged();
+    }
+
+    private int countCongViec() {
+        String query = "select  count (id) as count from CongViec ";
+        Cursor cursor = db.GetData(query);
+        cursor.moveToFirst();
+        return cursor.getInt(0);
     }
 }
