@@ -1,6 +1,7 @@
 package com.example.chung.nhacvieccanhan;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
@@ -28,6 +30,7 @@ import com.example.chung.nhacvieccanhan.ultils.ConstClass;
 import com.example.chung.nhacvieccanhan.ultils.UtilLog;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class CongViecActivity extends AppCompatActivity {
@@ -91,7 +94,7 @@ public class CongViecActivity extends AppCompatActivity {
                 if (text_length > 0) {
                     for (int i = 0; i < mCongViecList.size(); i++) {
                         CongViec mCongViec = mCongViecList.get(i);
-                        if (mCongViec.getTenCV().toLowerCase().contains(keyword.toLowerCase())) {
+                        if (mCongViec.getMoTa().toLowerCase().contains(keyword.toLowerCase())) {
                             congViecList.add(mCongViec);
                         }
                     }
@@ -110,6 +113,7 @@ public class CongViecActivity extends AppCompatActivity {
         Cursor cursor = db.GetData("SELECT * FROM CongViec");
 
         while (cursor.moveToNext()) {
+            UtilLog.log_d(TAG, cursor.getLong(3) + "");
             congViecList.add(
                     new CongViec(
                             cursor.getLong(0),
@@ -125,7 +129,7 @@ public class CongViecActivity extends AppCompatActivity {
         mCongViecList.addAll(congViecList);
 
         int count = countCongViec();
-        Toast.makeText(CongViecActivity.this, "Hiện tại có tất cả " + count + " công việc", Toast.LENGTH_SHORT).show();
+        Toast.makeText(CongViecActivity.this, "Hiện tại có tất cả " + count + " công việc trong trong tháng 9", Toast.LENGTH_SHORT).show();
     }
 
     private void initView() {
@@ -234,7 +238,7 @@ public class CongViecActivity extends AppCompatActivity {
     }
 
     private int countCongViec() {
-        String query = "select  count (id) as count from CongViec ";
+        String query = "select  count (id) as count from CongViec where ThoiGian >= 1535785200000 and ThoiGian <= 1538290800000";
         Cursor cursor = db.GetData(query);
         cursor.moveToFirst();
         return cursor.getInt(0);

@@ -19,7 +19,7 @@
             android:id="@+id/edtKeyword"
             android:focusable="true"
             android:layout_weight="1"
-            android:hint="Search By Name"
+            android:hint="Search By Noi Dung"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
