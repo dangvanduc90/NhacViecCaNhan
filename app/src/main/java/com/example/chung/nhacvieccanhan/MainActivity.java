@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         try {
             db = new SQLite(MainActivity.this, ConstClass.DATABASE_NAME, null, ConstClass.DATABASE_VERSION);
             // tao bang
-//            db.QueryData("DROP TABLE IF EXISTS LoaiCongViec");
-//            db.QueryData("DROP TABLE IF EXISTS CongViec");
+            db.QueryData("DROP TABLE IF EXISTS LoaiCongViec");
+            db.QueryData("DROP TABLE IF EXISTS CongViec");
 
             db.QueryData("CREATE TABLE IF NOT EXISTS LoaiCongViec (id INTEGER PRIMARY KEY AUTOINCREMENT, TenLoaiCV VARCHAR, MoTaLoaiCV VARCHAR)");
             db.QueryData("CREATE TABLE IF NOT EXISTS CongViec (" +
